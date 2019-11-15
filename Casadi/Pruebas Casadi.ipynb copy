@@ -1,0 +1,2058 @@
+{
+ "cells": [
+  {
+   "cell_type": "code",
+   "execution_count": 60,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "from casadi import *\n",
+    "import matplotlib.pyplot as plt"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 2,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "x = MX.sym(\"x\")"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 3,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "MX(x)"
+      ]
+     },
+     "execution_count": 3,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "x"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 4,
+   "metadata": {},
+   "outputs": [],
+   "source": [
+    "y = SX.sym('y',5)\n",
+    "Z = SX.sym('Z',4,2)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 5,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SX([y_0, y_1, y_2, y_3, y_4])"
+      ]
+     },
+     "execution_count": 5,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "y"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 6,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SX(\n",
+       "[[Z_0, Z_4], \n",
+       " [Z_1, Z_5], \n",
+       " [Z_2, Z_6], \n",
+       " [Z_3, Z_7]])"
+      ]
+     },
+     "execution_count": 6,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "Z"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 7,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SX(@1=0, \n",
+       "[[@1, @1, @1, @1, @1], \n",
+       " [@1, @1, @1, @1, @1], \n",
+       " [@1, @1, @1, @1, @1], \n",
+       " [@1, @1, @1, @1, @1]])"
+      ]
+     },
+     "execution_count": 7,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "SX.zeros(4,5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 8,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SX(\n",
+       "[[00, 00, 00, 00, 00], \n",
+       " [00, 00, 00, 00, 00], \n",
+       " [00, 00, 00, 00, 00], \n",
+       " [00, 00, 00, 00, 00]])"
+      ]
+     },
+     "execution_count": 8,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "SX(4,5)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 9,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SX(@1=1, \n",
+       "[[@1, 00, 00, 00], \n",
+       " [00, @1, 00, 00], \n",
+       " [00, 00, @1, 00], \n",
+       " [00, 00, 00, @1]])"
+      ]
+     },
+     "execution_count": 9,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "SX.eye(4)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 10,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "SX(\n",
+       "[[1, 2], \n",
+       " [3, 4]])"
+      ]
+     },
+     "execution_count": 10,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "SX([[1,2],[3,4]])"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 11,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "@1=3, \n",
+      "[[((@1*x_0)+y), ((@1*x_2)+y)], \n",
+      " [((@1*x_1)+y), ((@1*x_3)+y)]]\n",
+      "(2, 2)\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = SX.sym('x',2,2)\n",
+    "y = SX.sym('y')\n",
+    "f = 3*x + y\n",
+    "print(f)\n",
+    "print(f.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 12,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[[(sq(x_0)+(x_2*x_1)), ((x_0*x_2)+(x_2*x_3))], \n",
+      " [((x_1*x_0)+(x_3*x_1)), ((x_1*x_2)+sq(x_3))]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(x@x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 13,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "((3*x)+y)\n",
+      "(2, 2)\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = MX.sym('x',2,2)\n",
+    "y = MX.sym('y')\n",
+    "f = 3*x + y\n",
+    "print(f)\n",
+    "print(f.shape)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 14,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "mac(x,x,zeros(2x2))\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(x@x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 15,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[[x_0, 00, 00], \n",
+      " [x_1, x_3, 00], \n",
+      " [x_2, x_4, x_5]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(SX.sym('x',Sparsity.lower(3)))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 16,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "3x3,6nz\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(Sparsity.lower(3))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 17,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[[3, 7]] \n",
+      "\n",
+      "@1=1.34234, \n",
+      "[[@1, @1], \n",
+      " [4, 5]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "M = SX([[3,7],[4,5]])\n",
+    "print(M[0,:], '\\n')\n",
+    "\n",
+    "M[0,:] = 1.342341413\n",
+    "print(M)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 18,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(A\\b)\n"
+     ]
+    }
+   ],
+   "source": [
+    "A = MX.sym('A',3,3)\n",
+    "b = MX.sym('b',3)\n",
+    "print(solve(A,b))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 19,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[((A_0*x_0)+(A_3*x_1)), ((A_1*x_0)+(A_4*x_1)), ((A_2*x_0)+(A_5*x_1))]\n"
+     ]
+    }
+   ],
+   "source": [
+    "A = SX.sym('A',3,2)\n",
+    "x = SX.sym('x',2)\n",
+    "print(A@x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 20,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[[A_0, A_3], \n",
+      " [A_1, A_4], \n",
+      " [A_2, A_5]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(jacobian(A@x,x))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Derivadas"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 21,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[[A_0, A_3], \n",
+      " [A_1, A_4], \n",
+      " [A_2, A_5]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "A = SX.sym('A',3,2)\n",
+    "x = SX.sym('x',2)\n",
+    "print(jacobian(A@x,x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 22,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[((A_0*x_0)+(A_3*x_1)), ((A_1*x_0)+(A_4*x_1)), ((A_2*x_0)+(A_5*x_1))]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(A@x)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 23,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(((((sq(A_0)+sq(A_1))+sq(A_2))+sq(A_3))+sq(A_4))+sq(A_5))\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(dot(A,A))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 24,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "[[(A_0+A_0), (A_3+A_3)], \n",
+      " [(A_1+A_1), (A_4+A_4)], \n",
+      " [(A_2+A_2), (A_5+A_5)]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(gradient(dot(A,A),A))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 25,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "(sq(x_0)+sq(x_1))\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(dot(x,x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 26,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[(x_0+x_0), (x_1+x_1)]\n"
+     ]
+    }
+   ],
+   "source": [
+    "print(gradient(dot(x,x),x))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 27,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "H: @1=2, \n",
+      "[[@1, 00], \n",
+      " [00, @1]]\n"
+     ]
+    }
+   ],
+   "source": [
+    "[H,g] = hessian(dot(x,x),x)\n",
+    "print('H:', H)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 28,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[(v_0+(3*v_1)), ((4*v_0)+(7*v_1)), ((2*v_0)+(8*v_1))]\n"
+     ]
+    }
+   ],
+   "source": [
+    "A = DM([[1,3],[4,7],[2,8]])\n",
+    "x = SX.sym('x',2)\n",
+    "v = SX.sym('v',2)\n",
+    "f = mtimes(A,x)\n",
+    "print(jtimes(f,x,v))"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 29,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[(((2*w_2)+(4*w_1))+w_0), (((8*w_2)+(7*w_1))+(3*w_0))]\n"
+     ]
+    }
+   ],
+   "source": [
+    "w = SX.sym('w',3)\n",
+    "f = mtimes(A,x)\n",
+    "print(jtimes(f,x,w,True))"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Funciones"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 30,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "f:(i0[2],i1)->(o0[2],o1[2]) SXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = SX.sym('x',2)\n",
+    "y = SX.sym('y')\n",
+    "f = Function('f',[x,y],[x,sin(y)*x])\n",
+    "print(f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 31,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "f:(i0[2],i1)->(o0[2],o1[2]) MXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = MX.sym('x',2)\n",
+    "y = MX.sym('y')\n",
+    "f = Function('f',[x,y],[x,sin(y)*x])\n",
+    "print(f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 32,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "f:(x[2],y)->(r[2],q[2]) MXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "f = Function('f',[x,y], [x,sin(y)*x], ['x','y'],['r','q'])\n",
+    "print(f)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 33,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "r0: [1.1, 1.1]\n",
+      "q0: [-0.17352, -0.17352]\n"
+     ]
+    }
+   ],
+   "source": [
+    "r0, q0 = f(1.1,3.3)\n",
+    "print('r0:',r0)\n",
+    "print('q0:',q0)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 34,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "res: {'q': DM([-0.17352, -0.17352]), 'r': DM([1.1, 1.1])}\n"
+     ]
+    }
+   ],
+   "source": [
+    "res = f(x=1.1, y=3.3)\n",
+    "print('res:', res)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 35,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "res: [DM([1.1, 1.1]), DM([-0.17352, -0.17352])]\n",
+      "res: {'q': DM([-0.17352, -0.17352]), 'r': DM([1.1, 1.1])}\n"
+     ]
+    }
+   ],
+   "source": [
+    "arg = [1.1,3.3]\n",
+    "res = f.call(arg)\n",
+    "print('res:', res)\n",
+    "arg = {'x':1.1,'y':3.3}\n",
+    "res = f.call(arg)\n",
+    "print('res:', res)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Nonlinear root finding"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 36,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "G:(i0,i1)->(o0,o1) Newton\n"
+     ]
+    }
+   ],
+   "source": [
+    "nz = 1\n",
+    "nx = 1\n",
+    "z = SX.sym('x',nz)\n",
+    "x = SX.sym('x',nx)\n",
+    "g0 = sin(x+z)\n",
+    "g1 = cos(x-z)\n",
+    "g = Function('g',[z,x],[g0,g1])\n",
+    "G = rootfinder('G','newton',g)\n",
+    "print(G)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Initial-value problems and sensitivity analysis"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 37,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "F:(x0,p,z0,rx0[0],rp[0],rz0[0])->(xf,qf[0],zf,rxf[0],rqf[0],rzf[0]) IdasInterface\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = SX.sym('x'); z = SX.sym('z'); p = SX.sym('p')\n",
+    "dae = {'x':x, 'z':z, 'p':p, 'ode':z+p, 'alg':z*cos(z)-x}\n",
+    "F = integrator('F', 'idas', dae)\n",
+    "print(F)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 38,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "0.1724\n"
+     ]
+    }
+   ],
+   "source": [
+    "r = F(x0=0, z0=0, p=0.1)\n",
+    "print(r['xf'])"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Non Linear Programming"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 39,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "S:(x0[3],p[],lbx[3],ubx[3],lbg,ubg,lam_x0[3],lam_g0)->(x[3],f,g,lam_x[3],lam_g,lam_p[]) IpoptInterface\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = SX.sym('x'); y = SX.sym('y'); z = SX.sym('z')\n",
+    "nlp = {'x':vertcat(x,y,z), 'f':x**2+100*z**2, 'g':z+(1-x)**2-y}\n",
+    "S = nlpsol('S', 'ipopt', nlp)\n",
+    "print(S)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 40,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "******************************************************************************\n",
+      "This program contains Ipopt, a library for large-scale nonlinear optimization.\n",
+      " Ipopt is released as open source code under the Eclipse Public License (EPL).\n",
+      "         For more information visit http://projects.coin-or.org/Ipopt\n",
+      "******************************************************************************\n",
+      "\n",
+      "This is Ipopt version 3.12.3, running with linear solver mumps.\n",
+      "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n",
+      "\n",
+      "Number of nonzeros in equality constraint Jacobian...:        3\n",
+      "Number of nonzeros in inequality constraint Jacobian.:        0\n",
+      "Number of nonzeros in Lagrangian Hessian.............:        2\n",
+      "\n",
+      "Total number of variables............................:        3\n",
+      "                     variables with only lower bounds:        0\n",
+      "                variables with lower and upper bounds:        0\n",
+      "                     variables with only upper bounds:        0\n",
+      "Total number of equality constraints.................:        1\n",
+      "Total number of inequality constraints...............:        0\n",
+      "        inequality constraints with only lower bounds:        0\n",
+      "   inequality constraints with lower and upper bounds:        0\n",
+      "        inequality constraints with only upper bounds:        0\n",
+      "\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "   0  6.2500000e+01 0.00e+00 9.00e+01  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0\n",
+      "   1  1.8457621e+01 1.48e-02 4.10e+01  -1.0 4.10e-01   2.0 1.00e+00 1.00e+00f  1\n",
+      "   2  7.8031530e+00 3.84e-03 8.76e+00  -1.0 2.63e-01   1.5 1.00e+00 1.00e+00f  1\n",
+      "   3  7.1678278e+00 9.42e-05 1.04e+00  -1.0 9.32e-02   1.0 1.00e+00 1.00e+00f  1\n",
+      "   4  6.7419924e+00 6.18e-03 9.95e-01  -1.0 2.69e-01   0.6 1.00e+00 1.00e+00f  1\n",
+      "   5  5.4363330e+00 7.03e-02 1.04e+00  -1.7 8.40e-01   0.1 1.00e+00 1.00e+00f  1\n",
+      "   6  1.2144815e+00 1.52e+00 1.32e+00  -1.7 3.21e+00  -0.4 1.00e+00 1.00e+00f  1\n",
+      "   7  1.0214718e+00 2.51e-01 1.17e+01  -1.7 1.33e+00   0.9 1.00e+00 1.00e+00h  1\n",
+      "   8  3.1864085e-01 1.04e-03 7.53e-01  -1.7 3.58e-01    -  1.00e+00 1.00e+00f  1\n",
+      "   9  0.0000000e+00 3.19e-01 0.00e+00  -1.7 5.64e-01    -  1.00e+00 1.00e+00f  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  10  0.0000000e+00 0.00e+00 0.00e+00  -1.7 3.19e-01    -  1.00e+00 1.00e+00h  1\n",
+      "\n",
+      "Number of Iterations....: 10\n",
+      "\n",
+      "                                   (scaled)                 (unscaled)\n",
+      "Objective...............:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "Dual infeasibility......:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "Complementarity.........:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "Overall NLP error.......:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "\n",
+      "\n",
+      "Number of objective function evaluations             = 11\n",
+      "Number of objective gradient evaluations             = 11\n",
+      "Number of equality constraint evaluations            = 11\n",
+      "Number of inequality constraint evaluations          = 0\n",
+      "Number of equality constraint Jacobian evaluations   = 11\n",
+      "Number of inequality constraint Jacobian evaluations = 0\n",
+      "Number of Lagrangian Hessian evaluations             = 10\n",
+      "Total CPU secs in IPOPT (w/o function evaluations)   =      0.010\n",
+      "Total CPU secs in NLP function evaluations           =      0.000\n",
+      "\n",
+      "EXIT: Optimal Solution Found.\n",
+      "           S  :   t_proc      (avg)   t_wall      (avg)    n_eval\n",
+      "       nlp_f  |  22.00us (  2.00us)  22.00us (  2.00us)        11\n",
+      "       nlp_g  |  29.00us (  2.64us)  29.00us (  2.64us)        11\n",
+      "  nlp_grad_f  |  31.00us (  2.58us)  28.00us (  2.33us)        12\n",
+      "  nlp_hess_l  |  21.00us (  2.10us)  23.00us (  2.30us)        10\n",
+      "   nlp_jac_g  |  23.00us (  1.92us)  24.00us (  2.00us)        12\n",
+      "       total  |  16.72ms ( 16.72ms)  30.64ms ( 30.64ms)         1\n",
+      "x_opt:  [0, 1, 0]\n"
+     ]
+    }
+   ],
+   "source": [
+    "r = S(x0=[2.5,3.0,0.75],\\\n",
+    "      lbg=0, ubg=0)\n",
+    "x_opt = r['x']\n",
+    "print('x_opt: ', x_opt)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Quadratic programming"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 41,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "S:(x0[2],p[],lbx[2],ubx[2],lbg,ubg,lam_x0[2],lam_g0)->(x[2],f,g,lam_x[2],lam_g,lam_p[]) MXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "x = SX.sym('x'); y = SX.sym('y')\n",
+    "qp = {'x':vertcat(x,y), 'f':x**2+y**2, 'g':x+y-10}\n",
+    "S = qpsol('S', 'qpoases', qp)\n",
+    "print(S)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 42,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "\n",
+      "\n",
+      "####################   qpOASES  --  QP NO.   1   #####################\n",
+      "\n",
+      "    Iter   |    StepLength    |       Info       |   nFX   |   nAC    \n",
+      " ----------+------------------+------------------+---------+--------- \n",
+      "       0   |   1.866661e-07   |   ADD CON    0   |     1   |     1   \n",
+      "       1   |   8.333622e-10   |   REM BND    1   |     0   |     1   \n",
+      "       2   |   1.000000e+00   |    QP SOLVED     |     0   |     1   \n",
+      "x_opt:  [5, 5]\n"
+     ]
+    }
+   ],
+   "source": [
+    "r = S(lbg=0)\n",
+    "x_opt = r['x']\n",
+    "print('x_opt: ', x_opt)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## For-loop equivalents"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 52,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "f:(x)->(r) SXFunction\n",
+      "F:(i0[1x4])->(o0[1x4]) MXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "N = 4\n",
+    "X = MX.sym(\"X\",1,N)\n",
+    "f = Function('f',[x,], [sin(x)*x], ['x',],['r',])\n",
+    "\n",
+    "print(f)\n",
+    "\n",
+    "ys = []\n",
+    "for i in range(N):\n",
+    "    ys.append(f(X[:,i]))\n",
+    "\n",
+    "Y = hcat(ys)\n",
+    "F = Function('F',[X],[Y])\n",
+    "print(F)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 53,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "map4_f:(x[1x4])->(r[1x4]) Map\n"
+     ]
+    }
+   ],
+   "source": [
+    "F = f.map(N)\n",
+    "print(F)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 54,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "threadmap2_map2_f:(x[1x4])->(r[1x4]) ThreadMap\n"
+     ]
+    }
+   ],
+   "source": [
+    "F = f.map(N,\"thread\",2)\n",
+    "print(F)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 56,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "F:(i0)->(o0) MXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "x0 = MX.sym(\"x0\")\n",
+    "x = x0\n",
+    "for i in range(N):\n",
+    "    x = f(x)\n",
+    "\n",
+    "F = Function('F',[x0],[x])\n",
+    "print(F)"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 57,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "fold_f:(x)->(r) MXFunction\n"
+     ]
+    }
+   ],
+   "source": [
+    "F = f.fold(N)\n",
+    "print(F)"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Optimal control with CasADi\n",
+    "$$\n",
+    "\\begin{split}\\begin{array}{lc}\n",
+    "\\begin{array}{l}\n",
+    "\\text{minimize:} \\\\\n",
+    "x(\\cdot) \\in \\mathbb{R}^2, \\, u(\\cdot) \\in \\mathbb{R}\n",
+    "\\end{array}\n",
+    "\\quad \\displaystyle \\int_{t=0}^{T}{(x_0^2 + x_1^2 + u^2) \\, dt}\n",
+    "\\\\\n",
+    "\\\\\n",
+    "\\text{subject to:} \\\\\n",
+    "\\\\\n",
+    "\\begin{array}{ll}\n",
+    "\\left\\{\n",
+    "\\begin{array}{l}\n",
+    "\\dot{x}_0 = (1-x_1^2) \\, x_0 - x_1 + u \\\\\n",
+    "\\dot{x}_1 = x_0 \\\\\n",
+    "-1.0 \\le u \\le 1.0, \\quad x_1 \\ge -0.25\n",
+    "\\end{array} \\right. & \\text{for} \\, 0 \\le t \\le T \\\\\n",
+    "x_0(0)=0, \\quad x_1(0)=1,\n",
+    "\\end{array}\n",
+    "\\end{array}\\end{split}\n",
+    "$$\n",
+    "with $T=10$."
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Direct single-shooting"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 75,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0.235378, 0.32721]\n",
+      "0.0382084\n",
+      "This is Ipopt version 3.12.3, running with linear solver mumps.\n",
+      "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n",
+      "\n",
+      "Number of nonzeros in equality constraint Jacobian...:        0\n",
+      "Number of nonzeros in inequality constraint Jacobian.:     3240\n",
+      "Number of nonzeros in Lagrangian Hessian.............:     3240\n",
+      "\n",
+      "Total number of variables............................:       80\n",
+      "                     variables with only lower bounds:        0\n",
+      "                variables with lower and upper bounds:       80\n",
+      "                     variables with only upper bounds:        0\n",
+      "Total number of equality constraints.................:        0\n",
+      "Total number of inequality constraints...............:       80\n",
+      "        inequality constraints with only lower bounds:       80\n",
+      "   inequality constraints with lower and upper bounds:        0\n",
+      "        inequality constraints with only upper bounds:        0\n",
+      "\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "   0  3.6096823e+01 2.43e+00 7.03e-01  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0\n",
+      "   1  3.4430784e+01 2.35e+00 5.18e+00  -1.0 5.60e+00    -  1.52e-01 2.90e-02h  1\n",
+      "   2  2.7424297e+01 2.01e+00 7.28e+00  -1.0 7.54e+00    -  1.63e-01 1.11e-01f  1\n",
+      "   3  2.6994623e+01 1.99e+00 1.18e+01  -1.0 8.04e+00    -  1.34e-02 1.01e-02h  1\n",
+      "   4  2.5413434e+01 1.90e+00 8.33e+00  -1.0 8.94e+00    -  9.92e-03 3.37e-02f  1\n",
+      "   5  2.5204134e+01 1.89e+00 3.51e+01  -1.0 1.50e+01    -  1.21e-02 5.67e-03h  1\n",
+      "   6  2.4523358e+01 1.86e+00 5.15e+01  -1.0 1.39e+01    -  3.05e-04 1.48e-02h  1\n",
+      "   7  2.3727009e+01 1.83e+00 6.76e+01  -1.0 3.49e+01    -  6.39e-03 1.37e-02f  1\n",
+      "   8  2.3682340e+01 1.83e+00 2.10e+01  -1.0 2.88e+01    -  3.83e-03 1.71e-03h  1\n",
+      "   9  2.2429014e+01 1.79e+00 7.18e+01  -1.0 5.71e+01    -  1.61e-04 1.38e-02f  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  10  2.2398162e+01 1.79e+00 2.89e+02  -1.0 1.60e+01    -  1.06e-02 9.31e-04h  1\n",
+      "  11  2.2297022e+01 1.78e+00 2.50e+02  -1.0 2.16e+01    -  1.62e-04 2.00e-03h  1\n",
+      "  12  2.2282593e+01 1.78e+00 6.52e+03  -1.0 2.72e+01    -  6.38e-02 6.62e-04h  1\n",
+      "  13  2.2223697e+01 1.78e+00 2.15e+05  -1.0 2.73e+01    -  1.01e-01 2.84e-03h  1\n",
+      "  14  2.2221055e+01 1.78e+00 9.85e+07  -1.0 8.61e+00    -  4.96e-02 9.00e-05h  1\n",
+      "  15  2.2220425e+01 1.78e+00 1.53e+11  -1.0 3.45e+00    -  3.02e-02 1.87e-05h  1\n",
+      "  16r 2.2220425e+01 1.78e+00 1.00e+03   0.3 0.00e+00    -  0.00e+00 3.58e-07R  2\n",
+      "  17r 2.0421781e+01 1.61e+00 1.02e+03   0.3 6.33e+02    -  3.82e-03 4.67e-04f  1\n",
+      "  18r 2.0421781e+01 1.61e+00 9.99e+02   0.2 0.00e+00    -  0.00e+00 3.71e-07R  3\n",
+      "  19r 1.2294762e+01 7.88e-01 9.97e+02   0.2 4.38e+02    -  3.41e-03 1.42e-03f  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  20  1.2123918e+01 7.78e-01 2.16e+01  -1.0 1.17e+00    -  2.03e-02 1.01e-02f  1\n",
+      "  21  1.1771430e+01 7.55e-01 2.13e+01  -1.0 1.75e+00    -  1.10e-02 1.92e-02f  1\n",
+      "  22  1.0399849e+01 6.56e-01 2.09e+01  -1.0 1.61e+00    -  3.14e-02 7.91e-02f  1\n",
+      "  23  9.8090895e+00 4.91e-01 1.43e+01  -1.0 1.01e+00    -  2.63e-01 2.12e-01f  1\n",
+      "  24  8.7297885e+00 4.52e-01 1.60e+01  -1.0 6.10e-01    -  2.57e-01 1.14e-01f  1\n",
+      "  25  7.0026275e+00 3.53e-01 1.19e+01  -1.0 1.35e+00    -  3.31e-01 2.82e-01f  1\n",
+      "  26  6.6730615e+00 5.39e-01 2.17e+01  -1.0 5.19e-01    -  2.37e-01 9.15e-01f  1\n",
+      "  27  6.8303751e+00 4.55e-02 4.16e+01  -1.0 1.37e+00    -  1.75e-01 3.19e-01h  1\n",
+      "  28  7.7549338e+00 7.29e-01 1.55e+01  -1.0 1.28e+00    -  2.85e-01 9.49e-01f  1\n",
+      "  29  5.3714597e+00 0.00e+00 1.38e+01  -1.0 1.13e+00   0.0 4.34e-01 5.19e-01f  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  30  4.2052139e+00 4.06e-03 4.50e+00  -1.0 1.16e+00  -0.5 3.14e-01 3.47e-01f  1\n",
+      "  31  4.8125540e+00 0.00e+00 1.97e+00  -1.0 3.42e-01    -  7.77e-01 1.00e+00f  1\n",
+      "  32  4.8881045e+00 0.00e+00 1.28e-01  -1.0 1.28e-01    -  1.00e+00 1.00e+00h  1\n",
+      "  33  4.1429858e+00 0.00e+00 9.00e-01  -2.5 1.50e-01    -  8.58e-01 1.00e+00f  1\n",
+      "  34  3.7752332e+00 0.00e+00 1.97e+00  -2.5 1.56e-01    -  1.00e+00 1.00e+00h  1\n",
+      "  35  3.6932284e+00 0.00e+00 1.75e-01  -2.5 4.65e-02    -  1.00e+00 1.00e+00h  1\n",
+      "  36  3.6787138e+00 0.00e+00 1.03e-02  -2.5 1.48e-02    -  1.00e+00 1.00e+00h  1\n",
+      "  37  3.6323438e+00 3.07e-06 1.00e-01  -3.8 3.17e-02    -  9.93e-01 9.71e-01h  1\n",
+      "  38  3.6243046e+00 0.00e+00 4.87e-03  -3.8 9.84e-03    -  1.00e+00 1.00e+00h  1\n",
+      "  39  3.6239975e+00 0.00e+00 5.32e-05  -3.8 4.86e-03    -  1.00e+00 1.00e+00h  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  40  3.6208666e+00 3.08e-09 8.02e-04  -5.7 5.33e-03    -  1.00e+00 9.84e-01h  1\n",
+      "  41  3.6207631e+00 0.00e+00 1.04e-05  -5.7 5.09e-03    -  1.00e+00 1.00e+00h  1\n",
+      "  42  3.6207264e+00 9.73e-11 3.61e-04  -8.6 2.52e-03    -  9.96e-01 9.36e-01h  1\n",
+      "  43  3.6207238e+00 0.00e+00 8.21e-08  -8.6 8.20e-04    -  1.00e+00 1.00e+00f  1\n",
+      "  44  3.6207238e+00 0.00e+00 5.48e-10  -8.6 7.13e-05    -  1.00e+00 1.00e+00h  1\n",
+      "\n",
+      "Number of Iterations....: 44\n",
+      "\n",
+      "                                   (scaled)                 (unscaled)\n",
+      "Objective...............:   3.6207238300426905e+00    3.6207238300426905e+00\n",
+      "Dual infeasibility......:   5.4807449730707209e-10    5.4807449730707209e-10\n",
+      "Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "Complementarity.........:   4.2687128882380504e-09    4.2687128882380504e-09\n",
+      "Overall NLP error.......:   4.2687128882380504e-09    4.2687128882380504e-09\n",
+      "\n",
+      "\n",
+      "Number of objective function evaluations             = 50\n",
+      "Number of objective gradient evaluations             = 45\n",
+      "Number of equality constraint evaluations            = 0\n",
+      "Number of inequality constraint evaluations          = 50\n",
+      "Number of equality constraint Jacobian evaluations   = 0\n",
+      "Number of inequality constraint Jacobian evaluations = 47\n",
+      "Number of Lagrangian Hessian evaluations             = 44\n",
+      "Total CPU secs in IPOPT (w/o function evaluations)   =      0.118\n",
+      "Total CPU secs in NLP function evaluations           =      2.375\n",
+      "\n",
+      "EXIT: Optimal Solution Found.\n",
+      "      solver  :   t_proc      (avg)   t_wall      (avg)    n_eval\n",
+      "       nlp_f  |  45.19ms (903.84us)  45.23ms (904.58us)        50\n",
+      "       nlp_g  |  46.40ms (927.98us)  46.42ms (928.42us)        50\n",
+      "  nlp_grad_f  | 138.29ms (  3.01ms) 138.19ms (  3.00ms)        46\n",
+      "  nlp_hess_l  |   1.80 s ( 42.97ms)   1.80 s ( 42.95ms)        42\n",
+      "   nlp_jac_g  | 361.43ms (  7.53ms) 361.20ms (  7.53ms)        48\n",
+      "       total  |   2.52 s (  2.52 s)   2.52 s (  2.52 s)         1\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "\n",
+    "T = 10. # Time horizon\n",
+    "N = 80 # number of control intervals\n",
+    "\n",
+    "# Declare model variables\n",
+    "x1 = MX.sym('x1')\n",
+    "x2 = MX.sym('x2')\n",
+    "x = vertcat(x1, x2)\n",
+    "u = MX.sym('u')\n",
+    "\n",
+    "# Model equations\n",
+    "xdot = vertcat((1-x2**2)*x1 - x2 + u, x1)\n",
+    "\n",
+    "# Objective term\n",
+    "L = x1**2 + x2**2 + u**2\n",
+    "\n",
+    "# Formulate discrete time dynamics\n",
+    "if False:\n",
+    "    # CVODES from the SUNDIALS suite\n",
+    "    dae = {'x':x, 'p':u, 'ode':xdot, 'quad':L}\n",
+    "    opts = {'tf':T/N}\n",
+    "    F = integrator('F', 'cvodes', dae, opts)\n",
+    "else:\n",
+    "    # Fixed step Runge-Kutta 4 integrator\n",
+    "    M = 4 # RK4 steps per interval\n",
+    "    DT = T/N/M\n",
+    "    f = Function('f', [x, u], [xdot, L])\n",
+    "    X0 = MX.sym('X0', 2)\n",
+    "    U = MX.sym('U')\n",
+    "    X = X0\n",
+    "    Q = 0\n",
+    "    for j in range(M):\n",
+    "        k1, k1_q = f(X, U)\n",
+    "        k2, k2_q = f(X + DT/2 * k1, U)\n",
+    "        k3, k3_q = f(X + DT/2 * k2, U)\n",
+    "        k4, k4_q = f(X + DT * k3, U)\n",
+    "        X=X+DT/6*(k1 +2*k2 +2*k3 +k4)\n",
+    "        Q = Q + DT/6*(k1_q + 2*k2_q + 2*k3_q + k4_q)\n",
+    "    F = Function('F', [X0, U], [X, Q],['x0','p'],['xf','qf'])\n",
+    "\n",
+    "# Evaluate at a test point\n",
+    "Fk = F(x0=[0.2,0.3],p=0.4)\n",
+    "print(Fk['xf'])\n",
+    "print(Fk['qf'])\n",
+    "\n",
+    "# Start with an empty NLP\n",
+    "w=[]\n",
+    "w0 = []\n",
+    "lbw = []\n",
+    "ubw = []\n",
+    "J = 0\n",
+    "g=[]\n",
+    "lbg = []\n",
+    "ubg = []\n",
+    "\n",
+    "# Formulate the NLP\n",
+    "Xk = MX([0, 1])\n",
+    "for k in range(N):\n",
+    "    # New NLP variable for the control\n",
+    "    Uk = MX.sym('U_' + str(k))\n",
+    "    w += [Uk]\n",
+    "    lbw += [-1]\n",
+    "    ubw += [1]\n",
+    "    w0 += [0]\n",
+    "\n",
+    "    # Integrate till the end of the interval\n",
+    "    Fk = F(x0=Xk, p=Uk)\n",
+    "    Xk = Fk['xf']\n",
+    "    J=J+Fk['qf']\n",
+    "\n",
+    "    # Add inequality constraint\n",
+    "    g += [Xk[0]]\n",
+    "    lbg += [-.25]\n",
+    "    ubg += [inf]\n",
+    "\n",
+    "# Create an NLP solver\n",
+    "prob = {'f': J, 'x': vertcat(*w), 'g': vertcat(*g)}\n",
+    "solver = nlpsol('solver', 'ipopt', prob)\n",
+    "\n",
+    "# Solve the NLP\n",
+    "sol = solver(x0=w0, lbx=lbw, ubx=ubw, lbg=lbg, ubg=ubg)\n",
+    "w_opt = sol['x']\n",
+    "\n",
+    "# Plot the solution\n",
+    "u_opt = w_opt\n",
+    "x_opt = [[0, 1]]\n",
+    "for k in range(N):\n",
+    "    Fk = F(x0=x_opt[-1], p=u_opt[k])\n",
+    "    x_opt += [Fk['xf'].full()]\n",
+    "x1_opt = [r[0] for r in x_opt]\n",
+    "x2_opt = [r[1] for r in x_opt]\n",
+    "\n",
+    "tgrid = [T/N*k for k in range(N+1)]\n",
+    "\n",
+    "\n",
+    "plt.figure(1)\n",
+    "plt.clf()\n",
+    "plt.plot(tgrid, x1_opt, '--')\n",
+    "plt.plot(tgrid, x2_opt, '-')\n",
+    "plt.step(tgrid, vertcat(DM.nan(1), u_opt), '-.')\n",
+    "plt.xlabel('t')\n",
+    "plt.legend(['x1','x2','u'])\n",
+    "plt.grid()\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "### Direct multiple-shooting"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 65,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0.335539, 0.434784]\n",
+      "0.183287\n",
+      "This is Ipopt version 3.12.3, running with linear solver mumps.\n",
+      "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n",
+      "\n",
+      "Number of nonzeros in equality constraint Jacobian...:      156\n",
+      "Number of nonzeros in inequality constraint Jacobian.:        0\n",
+      "Number of nonzeros in Lagrangian Hessian.............:      115\n",
+      "\n",
+      "Total number of variables............................:       60\n",
+      "                     variables with only lower bounds:       20\n",
+      "                variables with lower and upper bounds:       20\n",
+      "                     variables with only upper bounds:        0\n",
+      "Total number of equality constraints.................:       40\n",
+      "Total number of inequality constraints...............:        0\n",
+      "        inequality constraints with only lower bounds:        0\n",
+      "   inequality constraints with lower and upper bounds:        0\n",
+      "        inequality constraints with only upper bounds:        0\n",
+      "\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "   0  5.0098016e-01 8.76e-01 7.51e-01  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0\n",
+      "   1  1.3845259e+00 3.96e-01 3.84e-01  -1.7 1.12e+00    -  4.71e-01 5.47e-01h  1\n",
+      "   2  2.6299477e+00 1.57e-01 4.10e-01  -1.7 4.93e-01    -  7.70e-01 6.04e-01h  1\n",
+      "   3  3.8716210e+00 5.91e-03 3.72e-02  -1.7 1.84e-01    -  1.00e+00 1.00e+00h  1\n",
+      "   4  3.7640019e+00 9.33e-05 5.91e-02  -2.5 4.61e-02    -  9.40e-01 1.00e+00h  1\n",
+      "   5  3.7503306e+00 1.25e-05 9.36e-05  -2.5 1.37e-02    -  1.00e+00 1.00e+00h  1\n",
+      "   6  3.7350543e+00 1.01e-05 8.91e-05  -3.8 1.17e-02    -  1.00e+00 1.00e+00f  1\n",
+      "   7  3.7330679e+00 7.96e-07 5.18e-06  -5.7 4.12e-03    -  1.00e+00 1.00e+00h  1\n",
+      "   8  3.7329818e+00 8.84e-09 7.13e-08  -5.7 6.25e-04    -  1.00e+00 1.00e+00h  1\n",
+      "   9  3.7329694e+00 1.99e-11 1.75e-10  -8.6 2.21e-05    -  1.00e+00 1.00e+00h  1\n",
+      "\n",
+      "Number of Iterations....: 9\n",
+      "\n",
+      "                                   (scaled)                 (unscaled)\n",
+      "Objective...............:   3.7329694107153943e+00    3.7329694107153943e+00\n",
+      "Dual infeasibility......:   1.7472767677162437e-10    1.7472767677162437e-10\n",
+      "Constraint violation....:   1.9875073808961474e-11    1.9875073808961474e-11\n",
+      "Complementarity.........:   5.0072348300005349e-09    5.0072348300005349e-09\n",
+      "Overall NLP error.......:   5.0072348300005349e-09    5.0072348300005349e-09\n",
+      "\n",
+      "\n",
+      "Number of objective function evaluations             = 10\n",
+      "Number of objective gradient evaluations             = 10\n",
+      "Number of equality constraint evaluations            = 10\n",
+      "Number of inequality constraint evaluations          = 0\n",
+      "Number of equality constraint Jacobian evaluations   = 10\n",
+      "Number of inequality constraint Jacobian evaluations = 0\n",
+      "Number of Lagrangian Hessian evaluations             = 9\n",
+      "Total CPU secs in IPOPT (w/o function evaluations)   =      0.010\n",
+      "Total CPU secs in NLP function evaluations           =      0.047\n",
+      "\n",
+      "EXIT: Optimal Solution Found.\n",
+      "      solver  :   t_proc      (avg)   t_wall      (avg)    n_eval\n",
+      "       nlp_f  |   2.23ms (223.50us)   2.23ms (223.50us)        10\n",
+      "       nlp_g  |   2.29ms (228.60us)   2.29ms (229.00us)        10\n",
+      "  nlp_grad_f  |   8.49ms (771.36us)   8.21ms (746.00us)        11\n",
+      "  nlp_hess_l  |  23.20ms (  2.58ms)  23.44ms (  2.60ms)         9\n",
+      "   nlp_jac_g  |  13.28ms (  1.21ms)  13.30ms (  1.21ms)        11\n",
+      "       total  |  59.70ms ( 59.70ms)  59.30ms ( 59.30ms)         1\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "\n",
+    "T = 10. # Time horizon\n",
+    "N = 20 # number of control intervals\n",
+    "\n",
+    "# Declare model variables\n",
+    "x1 = MX.sym('x1')\n",
+    "x2 = MX.sym('x2')\n",
+    "x = vertcat(x1, x2)\n",
+    "u = MX.sym('u')\n",
+    "\n",
+    "# Model equations\n",
+    "xdot = vertcat((1-x2**2)*x1 - x2 + u, x1)\n",
+    "\n",
+    "# Objective term\n",
+    "L = x1**2 + x2**2 + u**2\n",
+    "\n",
+    "# Formulate discrete time dynamics\n",
+    "if False:\n",
+    "    # CVODES from the SUNDIALS suite\n",
+    "    dae = {'x':x, 'p':u, 'ode':xdot, 'quad':L}\n",
+    "    opts = {'tf':T/N}\n",
+    "    F = integrator('F', 'cvodes', dae, opts)\n",
+    "else:\n",
+    "    # Fixed step Runge-Kutta 4 integrator\n",
+    "    M = 4 # RK4 steps per interval\n",
+    "    DT = T/N/M\n",
+    "    f = Function('f', [x, u], [xdot, L])\n",
+    "    X0 = MX.sym('X0', 2)\n",
+    "    U = MX.sym('U')\n",
+    "    X = X0\n",
+    "    Q = 0\n",
+    "    for j in range(M):\n",
+    "        k1, k1_q = f(X, U)\n",
+    "        k2, k2_q = f(X + DT/2 * k1, U)\n",
+    "        k3, k3_q = f(X + DT/2 * k2, U)\n",
+    "        k4, k4_q = f(X + DT * k3, U)\n",
+    "        X=X+DT/6*(k1 +2*k2 +2*k3 +k4)\n",
+    "        Q = Q + DT/6*(k1_q + 2*k2_q + 2*k3_q + k4_q)\n",
+    "    F = Function('F', [X0, U], [X, Q],['x0','p'],['xf','qf'])\n",
+    "\n",
+    "# Evaluate at a test point\n",
+    "Fk = F(x0=[0.2,0.3],p=0.4)\n",
+    "print(Fk['xf'])\n",
+    "print(Fk['qf'])\n",
+    "\n",
+    "# Start with an empty NLP\n",
+    "w=[]\n",
+    "w0 = []\n",
+    "lbw = []\n",
+    "ubw = []\n",
+    "J = 0\n",
+    "g=[]\n",
+    "lbg = []\n",
+    "ubg = []\n",
+    "\n",
+    "# \"Lift\" initial conditions\n",
+    "Xk = MX.sym('X0', 2)\n",
+    "w += [Xk]\n",
+    "lbw += [0, 1]\n",
+    "ubw += [0, 1]\n",
+    "w0 += [0, 1]\n",
+    "\n",
+    "# Formulate the NLP\n",
+    "for k in range(N):\n",
+    "    # New NLP variable for the control\n",
+    "    Uk = MX.sym('U_' + str(k))\n",
+    "    w   += [Uk]\n",
+    "    lbw += [-1]\n",
+    "    ubw += [1]\n",
+    "    w0  += [0]\n",
+    "\n",
+    "    # Integrate till the end of the interval\n",
+    "    Fk = F(x0=Xk, p=Uk)\n",
+    "    Xk_end = Fk['xf']\n",
+    "    J=J+Fk['qf']\n",
+    "\n",
+    "    # New NLP variable for state at end of interval\n",
+    "    Xk = MX.sym('X_' + str(k+1), 2)\n",
+    "    w   += [Xk]\n",
+    "    lbw += [-0.25, -inf]\n",
+    "    ubw += [  inf,  inf]\n",
+    "    w0  += [0, 0]\n",
+    "\n",
+    "    # Add equality constraint\n",
+    "    g   += [Xk_end-Xk]\n",
+    "    lbg += [0, 0]\n",
+    "    ubg += [0, 0]\n",
+    "\n",
+    "# Create an NLP solver\n",
+    "prob = {'f': J, 'x': vertcat(*w), 'g': vertcat(*g)}\n",
+    "solver = nlpsol('solver', 'ipopt', prob);\n",
+    "\n",
+    "# Solve the NLP\n",
+    "sol = solver(x0=w0, lbx=lbw, ubx=ubw, lbg=lbg, ubg=ubg)\n",
+    "w_opt = sol['x'].full().flatten()\n",
+    "\n",
+    "# Plot the solution\n",
+    "x1_opt = w_opt[0::3]\n",
+    "x2_opt = w_opt[1::3]\n",
+    "u_opt = w_opt[2::3]\n",
+    "\n",
+    "tgrid = [T/N*k for k in range(N+1)]\n",
+    "\n",
+    "plt.figure(1)\n",
+    "plt.clf()\n",
+    "plt.plot(tgrid, x1_opt, '--')\n",
+    "plt.plot(tgrid, x2_opt, '-')\n",
+    "plt.step(tgrid, vertcat(DM.nan(1), u_opt), '-.')\n",
+    "plt.xlabel('t')\n",
+    "plt.legend(['x1','x2','u'])\n",
+    "plt.grid()\n"
+   ]
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Pendulum exercise\n",
+    "$$\n",
+    "\\begin{split}\\begin{array}{lc}\n",
+    "\\begin{array}{l}\n",
+    "\\text{minimize:} \\\\\n",
+    "x(\\cdot) \\in \\mathbb{R}^2, \\, u(\\cdot) \\in \\mathbb{R}\n",
+    "\\end{array}\n",
+    "\\quad \\displaystyle \\int_{t=0}^{T}{cos(x_1) \\, dt}\n",
+    "\\\\\n",
+    "\\\\\n",
+    "\\text{subject to:} \\\\\n",
+    "\\\\\n",
+    "\\begin{array}{ll}\n",
+    "\\left\\{\n",
+    "\\begin{array}{l}\n",
+    "\\dot{x}_0 = u - sin(x_1) \\\\\n",
+    "\\dot{x}_1 = x_0 \\\\\n",
+    "-u_{max} \\le u \\le u_{max} , \\quad\n",
+    "\\end{array} \\right. & \\text{for} \\, 0 \\le t \\le T \\\\\n",
+    "x_0(0)=0, \\quad x_1(0)=0,\n",
+    "\\end{array}\n",
+    "\\end{array}\\end{split}\n",
+    "$$\n",
+    "with $T=10$.\n",
+    "\n",
+    "siendo $$x_0 = \\theta'$$ $$x_1 = \\theta$$"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 101,
+   "metadata": {
+    "scrolled": true
+   },
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "[0, 0]\n",
+      "0.166667\n",
+      "This is Ipopt version 3.12.3, running with linear solver mumps.\n",
+      "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n",
+      "\n",
+      "Number of nonzeros in equality constraint Jacobian...:        0\n",
+      "Number of nonzeros in inequality constraint Jacobian.:      465\n",
+      "Number of nonzeros in Lagrangian Hessian.............:      465\n",
+      "\n",
+      "Total number of variables............................:       30\n",
+      "                     variables with only lower bounds:        0\n",
+      "                variables with lower and upper bounds:       30\n",
+      "                     variables with only upper bounds:        0\n",
+      "Total number of equality constraints.................:        0\n",
+      "Total number of inequality constraints...............:       30\n",
+      "        inequality constraints with only lower bounds:       30\n",
+      "   inequality constraints with lower and upper bounds:        0\n",
+      "        inequality constraints with only upper bounds:        0\n",
+      "\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "   0  5.0000000e+00 0.00e+00 5.47e-01  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0\n",
+      "   1  4.9870680e+00 0.00e+00 8.89e-02  -1.7 1.15e-01    -  9.04e-01 1.00e+00f  1\n",
+      "   2  4.9768035e+00 0.00e+00 1.34e-01  -2.5 4.29e-02    -  9.00e-01 1.00e+00h  1\n",
+      "   3  4.9414325e+00 0.00e+00 6.86e-02  -2.5 6.78e-02   0.0 1.00e+00 1.00e+00f  1\n",
+      "   4  4.7801757e+00 0.00e+00 5.99e-02  -2.5 1.79e-01  -0.5 7.11e-01 1.00e+00f  1\n",
+      "   5  4.5906970e+00 0.00e+00 1.02e-01  -2.5 1.11e-01  -0.1 1.00e+00 1.00e+00h  1\n",
+      "   6  3.4465981e+00 0.00e+00 2.75e-01  -2.5 1.96e+00  -0.5 1.45e-01 1.78e-01f  1\n",
+      "   7  1.3125486e+00 0.00e+00 5.04e-01  -2.5 4.12e+00  -0.1 9.19e-02 8.22e-02f  1\n",
+      "   8  1.8505025e+00 0.00e+00 1.73e+00  -2.5 1.89e-01   0.3 3.29e-01 1.00e+00h  1\n",
+      "   9 -2.5487146e-02 0.00e+00 2.23e-01  -2.5 4.04e-01  -0.2 3.67e-01 1.00e+00f  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  10 -1.7315020e-01 0.00e+00 2.09e-01  -2.5 9.02e-01  -0.6 4.06e-01 1.03e-01h  1\n",
+      "  11 -3.9428075e-01 0.00e+00 2.04e-01  -2.5 2.78e+01    -  3.31e-02 2.31e-02h  1\n",
+      "  12 -5.5200312e-01 0.00e+00 1.75e-01  -2.5 4.51e+00    -  3.01e-01 1.46e-01h  1\n",
+      "  13 -6.1339337e-01 0.00e+00 1.50e-01  -2.5 3.71e+00    -  2.74e-01 1.44e-01h  1\n",
+      "  14 -6.6842740e-01 0.00e+00 1.21e-01  -2.5 2.10e+00    -  6.39e-01 2.01e-01h  1\n",
+      "  15 -7.2153742e-01 0.00e+00 1.05e-01  -2.5 1.49e+00    -  1.00e+00 3.80e-01h  1\n",
+      "  16 -7.6177073e-01 0.00e+00 8.93e-03  -2.5 6.27e-01    -  1.00e+00 9.33e-01h  1\n",
+      "  17 -7.6107750e-01 0.00e+00 1.88e-05  -2.5 2.30e-01    -  1.00e+00 1.00e+00f  1\n",
+      "  18 -8.1251578e-01 0.00e+00 6.54e-03  -3.8 3.80e-01    -  7.93e-01 1.00e+00f  1\n",
+      "  19 -8.2149374e-01 0.00e+00 1.07e-04  -3.8 2.90e-01    -  1.00e+00 1.00e+00h  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  20 -8.2505300e-01 0.00e+00 3.64e-04  -5.7 1.81e-01    -  8.81e-01 7.01e-01h  1\n",
+      "  21 -8.2642508e-01 0.00e+00 8.52e-04  -5.7 1.88e-01    -  6.97e-01 8.74e-01h  1\n",
+      "  22 -8.2676798e-01 0.00e+00 3.11e-07  -5.7 9.17e-02    -  1.00e+00 1.00e+00f  1\n",
+      "  23 -8.2684381e-01 0.00e+00 3.60e-05  -8.6 3.03e-01    -  6.89e-01 9.99e-01h  1\n",
+      "  24 -8.2684670e-01 0.00e+00 8.03e-09  -8.6 5.67e-02    -  1.00e+00 1.00e+00f  1\n",
+      "  25 -8.2684681e-01 0.00e+00 1.98e-12  -8.6 2.68e-03    -  1.00e+00 1.00e+00h  1\n",
+      "\n",
+      "Number of Iterations....: 25\n",
+      "\n",
+      "                                   (scaled)                 (unscaled)\n",
+      "Objective...............:  -8.2684681346028110e-01   -8.2684681346028110e-01\n",
+      "Dual infeasibility......:   1.9838020115514610e-12    1.9838020115514610e-12\n",
+      "Constraint violation....:   0.0000000000000000e+00    0.0000000000000000e+00\n",
+      "Complementarity.........:   2.6048025520541458e-09    2.6048025520541458e-09\n",
+      "Overall NLP error.......:   2.6048025520541458e-09    2.6048025520541458e-09\n",
+      "\n",
+      "\n",
+      "Number of objective function evaluations             = 26\n",
+      "Number of objective gradient evaluations             = 26\n",
+      "Number of equality constraint evaluations            = 0\n",
+      "Number of inequality constraint evaluations          = 26\n",
+      "Number of equality constraint Jacobian evaluations   = 0\n",
+      "Number of inequality constraint Jacobian evaluations = 26\n",
+      "Number of Lagrangian Hessian evaluations             = 25\n",
+      "Total CPU secs in IPOPT (w/o function evaluations)   =      0.035\n",
+      "Total CPU secs in NLP function evaluations           =      0.237\n",
+      "\n",
+      "EXIT: Optimal Solution Found.\n",
+      "      solver  :   t_proc      (avg)   t_wall      (avg)    n_eval\n",
+      "       nlp_f  |   7.20ms (277.08us)   7.27ms (279.58us)        26\n",
+      "       nlp_g  |   7.28ms (279.81us)   7.28ms (280.00us)        26\n",
+      "  nlp_grad_f  |  22.10ms (818.41us)  22.15ms (820.30us)        27\n",
+      "  nlp_hess_l  | 158.18ms (  6.33ms) 158.11ms (  6.32ms)        25\n",
+      "   nlp_jac_g  |  44.69ms (  1.66ms)  44.80ms (  1.66ms)        27\n",
+      "       total  | 290.23ms (290.23ms) 288.34ms (288.34ms)         1\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "iVBORw0KGgoAAAANSUhEUgAAAXIAAAEGCAYAAAB4lx7eAAAABHNCSVQICAgIfAhkiAAAAAlwSFlzAAALEgAACxIB0t1+/AAAADh0RVh0U29mdHdhcmUAbWF0cGxvdGxpYiB2ZXJzaW9uMy4xLjAsIGh0dHA6Ly9tYXRwbG90bGliLm9yZy+17YcXAAAgAElEQVR4nO3deVzVVf7H8dcBLiC7C+ICCkZm7om7U6JlWllaWWllaovVTJPlTL+aVqv5TdOvGctmmrIys7Js1zLHNkFzFwxzw33DBRC8wGXncn5/fMlUEBTuvd+7fJ6PBw+B+10+Xy++PZzv+Z6jtNYIIYTwXH5mFyCEEKJpJMiFEMLDSZALIYSHkyAXQggPJ0EuhBAeLsCMk7Zq1UrHx8c3at/i4mJCQ0MdW5Cbk2v2DXLNvqEp15yenn5cax195vdNCfL4+HjS0tIatW9qairJycmOLcjNyTX7Brlm39CUa1ZKHajr+9K1IoQQHk6CXAghPJwEuRBCeDhT+sjrUllZSVZWFmVlZfVuFxkZyfbt211U1bkJDg4mNjYWi8VidilCCB/kNkGelZVFeHg48fHxKKXOul1RURHh4eEurKx+Wmvy8vLIysoiISHB7HKEED7IbbpWysrKaNmyZb0h7o6UUrRs2bLB3ySEEMJZ3CbIAY8L8V95at1CCO/gNl0rQggfUVECRUeh8Agt8tJguw3sFWCvrPnz18/Lf/vci6bbblbm+C5YCfIGzJs3j7/+9a8APPnkk0yaNMnkioRwY1rDiX1gPQSFh2s+jkBBzZ+FWVB64uTmPQE2n8uBvee33mY9nnb4MSXI65Gfn8+zzz5LWloaSimSkpK47rrraN68udmlCeEe7FWQvRkOrIEDq+DgGijJO32bkJYQ0Q4iYyGuP0S2h4j2EN6W9C07SOo3EPwDwd9S82fN5wFBxud+AeBF3Zf5qakOP6YEeY0NGzZw1113sX79eux2O/3792f8+PGMGDGCFi1aADBixAiWLl3KhAkTTK5WCJNUlcORn43QPrAaDq6DiiLjtebx0HkUxA2AFp2M8I5oB5ZmZz1c0UENbXu6pnYv5rZBfsvsNbW+N7pnW8Z2b0lphZ3Jc9fXen1cUiw39Y0jv7iC+z9IP+21j+8dVO/5+vXrx3XXXceTTz5JaWkpt99+OxaLhbi4uJPbxMbGcvjw4UZekRAeqiQfNn8G2xbB4TSoqhmhFd0Fet4EHYdAh0FGS1uYwm2D3AxPP/00/fr1Izg4mFdffZWZM2fW2kZGqAifUG2HPcvg5w9gxxLjpmPrrtD3Lug42Aju0JZmVylqNDnIlVLBwAogqOZ4n2mtn2nqcc/Wgi4qKqJZoH+9LewWoYENtsDrkp+fj81mo7KykrKyMmJjY0k9pT8rKyvL52ZqEz7m+G7I+AA2LTBGljRrAX3vhN63SReIG3NEi7wcGK61timlLMBKpdR/tdZrHXBsl5o6dSrPP/88+/bt49FHH+W5557j8ccf58QJ4y77d999xwsvvGBylUI4WFkhbP0SMubDoXWg/CBxBFz1otHnHRBkdoWiAU0Ocq21Bmw1X1pqPjxu0Od7771HQEAAt956K3a7ncGDB5ORkcFTTz1Fv379AKPr5dcbn0J4PFsO/PRP2PgeVJZAq85wxbPQazyEtzG7OnEelHbAQHullD+QDiQCr2mtH61jm6nAVICYmJikBQsWnPZ6ZGQkiYmJDZ7Lbrfj7+/f5Jodbffu3RQUFDjl2DabjbCwMKcc213JNTtPQKWNuEMLic36Gr/qCo61SeZo21EURnR2+TA/eZ/Pz7Bhw9K11n1rvaC1dtgHEAWkAN3r2y4pKUmfadu2bbW+V5fCwsJz2s7VzrX+xkhJSXHasd2VXLMTlBdr/dNMrV/ooPUzEVp/OkXr3F3OPWcD5H0+P0CariNTHTpqRWttVUqlAqOALY48thCikaoq4Of3YPlLYDsGF14Jw5+Sm5dexBGjVqKBypoQbwZcAbzY5MqEEE1TbTfGf6f+DU7sN4YM3jTXGD4ovIojWuRtgXk1/eR+wCda68UOOK4QorH2LINvn4CcbRDTA279FC4c4VWPuovfOGLUyi/AJQ6oRQjRVBXF8N1TkDbHeEx+3DvQ9Xrwc6sZq4WDyZOdQniLQ+vhy3shfx8MesDoB7cEm12VcAH5b7oBo0aNIioqitGjR5tdihB1q6qAH5+Dd0YasxFO+hpG/q+EuA+RFnkDHnnkEUpKSpg9e7bZpQhRW/Y2+HIqHNsMl9wOI1+A4AizqxIuJi3yGhs2bKBnz56UlZVRXFxMt27d2LJlC5dffrlbLfYsBGCMSFn1Krw5FIqOwfiPYMxrEuI+yj1b5P99zGhh1KGZvQr8G1F2mx5w1d/P+nJd09h27979/M8jhLOd2A8Lf2/MCd5lNFw7C0JbmV2VMJF7BrlJzpzGVgi3k/ERLPmzMbHV2Neh1wQZUijcNMjraTmXFhU5ravjzGlsQ0NDnXIeIc5bdTX8OANWzYKOv4PrX4eoDmZXJdyE9JGf4tdpbG+77TYefbTWvF9CmKOiBD6dZIR437vgjkUS4uI07tkiN0Fd09guW7aMZ555hszMTGw2G7GxscyZM4eRI0eaXa7wFUXZ8NF4Y53MkS/AwPulK0XUIkFe44477uCOO+4AwN/fn3Xr1gEwfPhwM8sSvix7G3x4s7Eq/fgPocvVZlck3JQEuRDuaPcP8OkUCAyFKf+Fdr3Nrki4MekjF8LdbJgD82+GqI5w948S4qJB0iIXwl1ouzFj4Zp/w4UjYdwcCJKH0UTDJMiFcAcVxXTb+iIcXwf974WRf2vcg2/CJ8lPihBms+XChzfR6vgmuOr/YMC9ZlckPIz0kQthphP7jVkLczLZ0v1xCXHRKNIiF8Isx7bABzdCVRlM+oq8PSVmVyQ8lLTIhTDDgdUw92pjzpQ7l0Jcf7MrEh5MgvwU+/fvP23Gw3/84x/MmDHDvIKEd8pcAu9fD2Gt4a7voPXFZlckPJzbdq1MWTqlzu/b7Xb8/f0BGBo7lMndJ5/cfkziGMYmjuVE2Qmmp04/bb+5o+Y6tV4hzsnPH8BXD0LbXnDbZxDa0uyKhBeQFrkQrqA1rHwFFv0BEi4zlmOTEBcO4rYt8rO1oIvOMo3tqds3D27eqBZ4QEAA1dXVJ78uKys772MIUUt1NXz/lPGgT7cb4PrZEBBodlXCi0iL/BQxMTHk5OSQl5dHeXk5ixcvNrsk4enslbDwfiPE+0+FG+dIiAuHc9sWuRksFgtPP/00AwYMICEhgS5duphdkvBkFcXw6WTY9R0MewIue0SmoBVOIUF+hgcffJAHH3zQ7DKEpyvKho9ugaObYPTL0PdOsysSXkyCXAhHy90B88dB8XFjHvGLrjK7IuHlJMiFcKT9q2DBBPAPhMnfQPs+ZlckfIBb3ezUWptdQqN4at3CwTZ/Bu+PhbAYuPsHCXHhMm4T5MHBweTl5XlcKGqtycvLIzg42OxShFm0hpUvw+d3QWw/uPNbaB5vdlXCh7hN10psbCxZWVnk5ubWu11ZWZnbhWZwcDCxsbFmlyHMYK+CJX+G9LnQfRyM/Q8EBJldlfAxbhPkFouFhISEBrdLTU3lkksucUFFQjSg3AafTTGGF/5uOgx/Cvzc5pdc4UPcJsiF8ChFx4wV7o9tluGFwnQS5EKcr+xt8OEtUJIHEz6GzleaXZHwcRLkQpyP3T/AJ5MhMBSmLJEV7oVbkA49Ic7Vhrdh/s3GiJR7lkmIC7chLXIhGlJth2+fgHWvQ+dRxsRXQWFmVyXESRLkQtSnvAg+uwt2fQsD/wBXPg9+/mZXJcRpJMiFOJuCLOOmZs52uGYm9LvL7IqEqFOTg1wpFQe8B7QBqoE3tdazmnpcIUx1eCN8NB4qS+G2TyHxcrMrEuKsHNEirwL+pLXeqJQKB9KVUt9rrbc54NhCuN62r+CLqRAWDXcsksWRhdtr8qgVrfVRrfXGms+LgO1A+6YeVwiX+3XOlE8mQpsecPcyCXHhERzaR66UigcuAdY58rhCOF1VBSx+GDI+gO43wpj/gMW95vQR4myUo2YbVEqFAcuB/9Vaf1HH61OBqQAxMTFJCxYsaNR5bDYbYWG+NfRLrtm5LBWFdNv6AlEF29jfcTz748ebsiSbvM++oSnXPGzYsHStdd9aL2itm/wBWIBvgennsn1SUpJurJSUlEbv66nkmp0oe7vWL/fQ+vnWWv/yqWvOeRbyPvuGplwzkKbryFRHjFpRwBxgu9Z6ZlOPJ4TL7PoePrsTLM1g8hKITTK7IiEaxRGP6A8BJgLDlVIZNR9XO+C4QjiH1rD2dWP2wuYdjcftJcSFB2tyi1xrvRJwfYeiEI1hr6xZCOJd6DIabnjTmABLCA8mT3YK31GSD59Ogn0rZCEI4VUkyIVvOL7LeNy+4BBcPxt6jTe7IiEcRoJceL89KUZL3M8Ck76GDgPNrkgIh5LfK4V3W/8WfHAjRLQ3bmpKiAsvJC1y4Z3slbD0MWMxiM6j4Ma3ISjc7KqEcAoJcuF9Sk/AJ5Ng33IY/CBcMUPmEBdeTYJceJfju+GjW+DEAWO+lEtuM7siIZxOglx4j5M3NQOMm5odB5ldkRAuITc7hXc47aZmioS48CnSIheeTW5qCiFBLjyY3NQUApAgF57q1yc1rQflpqbweRLkwvPsWQafTpabmkLUkJudwrOsfws+GCc3NYU4hbTIhWewV8J/H4W0OdD5KrjxLbmpKUQNCXLh/kryja6UfcthyDS4/Bm5qSnEKSTIhXuTm5pCNEiCXLivkzc1LTB5scxcKMRZSJALt9Tu8DewfA5Ed4EJHxlrawoh6iRBLtxLzU3NzrvkpqYQ50qCXLiPU9bUPBh3PR3Gz5GbmkKcAwly4R5ydxrTzxZkwdjX2WttRwcJcSHOiTwQJMy3+wd4+wooL4JJi6H3rWZXJIRHkSAX5tEa1r4O82+CqLiaNTUHmF2VEB5HulaEOaoqYMmfYeM86DIarp8NQWFmVyWER5IgF65Xkg8fT4QDK+F302H4U+AnvxwK0VgS5MK1cjKNm5qFR+GGt6DnzWZXJITHkyAXrrPre/jsTggIhsnfQFw/sysSwivI77PC+bSG1f+CD282ntCcmiIhLoQDSYtcOFdVOSx+GDLmw8XXwfVvQGCo2VUJ4VUkyIXz2HLg49vh0DoY+hgMfVRuagrhBBLkwjmO/gIfTYCSPLjpXeh2vdkVua08WzmhQfJPUTSe/PQIx9v2FXx5LzRrDncuhXa9za7IrVRXa7YeKWRZZg4pO3LYlGVl9u1JBJpdmPBYEuTCcbSGFS9Byv9CbD+4ZT6Ex5hdlVvQWqOU4lhBGdf+eyW5ReUoBb1io3jo8s50aRPBzmzNX77YzN2XJnBBtDwcJc6dBLlwjIoSWPR72Pol9JoAo18BS7DZVZnmRHEF248WsvlwAct35tIpOpS/ju1BTEQQV1zcmr4dWzD0omhahQWd3Gdtmeb7bcf4fls2H90zgAtjZPpecW4kyEXTFRyGBROMfvERz8PgP4JSZlflEtXVmgP5JWQXljGwU0sAJs5Zx0+7jp/c5qKYcC7rHA2AUooXbuhZ57Fah/ixYGo/Jry1jvFvrmX+PQPo0ibC+RchPJ4EuWiaQ+uNkSkVJXDrx9B5pNkVOZTWmqLyKnIKy0lsbXR3fLf1GKk7c8k8WkjmsSJKKuxEhVj4+akRKKUY2a0Nv0tsRdd2EVzcNuK0VndDEluHs2DqQG59ay0T3lzL/LsH0rWdhLmonwS5aLyN78M30yGiPdyxCFpfbHZFgNFKtmuNvVpTXfNnpV0THhyAxd+P7MIy9uTYKKmwU1xRZfxZXsX4/h0ICwpgUcZhPlx3kJyicrILyyipsAOw7bmRhAQGsH5fPks2H6VzTDg3942ja9uI08L29oFNW5bugugwPp46iHvfT6fSXt2kYwnfIEEuzp+9Er59HNa/SXnHoey89FVOWEOJ9y+hQ8sQ8mzlzF93EFt5FUVlVTV/VjJlSAJDO0eTeayQhxZkUFVthGxVdTV2u+a5Md25omsMa/bkcf8PxQSkfHvaaV+7rQ+XdY5mWWY2f/zwZwCqNdi1prpa8+E9A+mf0IKFGYeZ/smmWmUvefBSuraL4Nutx3h60dZar19xcQxhQQFU2o3/ALq2i2B4l9bERAQRExGMX0130eNXX8yTo7s64S/2N/GtQvnvtEvx8zPOmVNYRusI373nIOrnkCBXSr0DjAZytNbdHXFMYb7CskqOWEtrPsq4sHUYA2KgYsFEAg+t4m37NbywYzz2HUYo/uWqLtw79AKKyqqY+f1Omln8CQsOIDwogNCgAEprWrbBAf50bBlCgJ8f/n6KAD+Fv5+iZZgxAK9NZDCXtg8gNjbutHraRhpB1j4qhAn9OwBGV7yfn8JfqZOvd20XwZ9GdDa+X/NagL+idYTRxTGiawydY8IJDQwgJMifkEB/QgKNOgHGJcUyLin2rH8vv4ars/16nvnrDvD3JZm8e2d/kjo2d8m5hWdxVIv8XeDfwHsOOp5wIa012YXllFRU0Sk6jIqqaob/M5WsE6WnbfdIrwoGZD+NpSib99s+Tl7HMcyIDKZNZDOah1jo0DIEgA4tQtj9v1cR4F/3U5zxrUKZPbHvWetJaBXKrRcHkZxcd6v3ojbh9baIu7SJqPcmYdvIZrSNbHbW193N8C6tefunfdwxZx1zp/Snf0ILs0sSbsYhQa61XqGUinfEsRoy69gs5i2dV+82Q2OHMrn7ZACmLJ3CmMQxjE0cy4myE0xPnd7gOc7cflK3SSTHJbOvYB/PrXmuwf3P3H5an2n0bt2bjJwMZm2c1eD+Z24/yn8UAKmHUpm3tf5rB3h60NMkRCac3H5m8kyaBzdn4e6FLNq9CIATJRXYyqoorukfrrRXExUSSJc24cxMnsmVXduQp1ayr3w5M/r9m045P/DlqkeZEtYMEi6DoEwgk8wCoOD0888dNRc/FO9ueZdNuZt4edjLALyS/gqbcmt3eZwqKijqtO2t5VZmDJ4BwIzVMzhQeKDe/TtGdDxt+6igKB5KegiAh1MexlpurXf/XtG9Ttu+V3Sv036WGtKUn73EykSSSa71/baRzU7eAJ30znremdyPQRe0bLAW4Ttc1keulJoKTAWIiYkhNTW1Ucex2+1YrfX/Y9xTvofU48bxrVYrmZmZpGalYrPbGtwXqLX95s2bYQ9kV2af0/5nbr9x40aswVb2lu09p/3P3L6kWQmpqalsLtmMtbDh/devX88By4GT2y9bvpID1maklWyhtJmx/6GiakqrNIH+ipAACA72o5l/FVarlVWrVnFZeBhrbfkcrCyhxY//Q9SBTyhr3YnCkFiqS+1QevY6fn1v9xTsIbci9+TXB08cbDBIK/0rSU1NxWazcfDEQYqri0/ufzTvKNbK+vcPLA48bftCv0JSi4yvc4/nUmwvrnf/g6UHT9t+T+HpP0sNaezP3uGKw+T559X77+LB7poXN1Qz5Z21vHhZCJFBnj/E02azNToLPJUzrllprR1zIKNFvvhc+sj79u2r09LSGnWe1NRUkpOTG7Wvp2rMNR/IK+bbrcdI3ZHLhv35VNo1kc0srHv8coIt/hwrKCMqxEKwpZ6V6ssK4YupsPO/cMlEuOafEHDuQ+mawtfe54W7F5KZmcljox+rd7vconLW7s3j2l7tXFSZc/na+wxNu2alVLrWula/pIxa8RKlFXZ+2pXLgISWRIZY+H5bNn9bkslFMeHcOSSBoRdF07djCwIDjH7rNpENjIA4vhsW3Ap5u+Gql6D/PT7zkI8ZxiaOJTUrtcHtosODTob46t3HCQkKoHdclJOrE+5OgtyDaa3ZlFXAxxsOsXjTEYrKq5g1vjdjerfnxj6xXN2jLe2iGnFTL/Mb+PI+8AuAOxYafeLCqU6UncBmt53z9vZqzYyvt3KsoIwP7xlI9/aRTqxOuDuHTA6tlPoIWANcpJTKUkrd5YjjirMrKKlk5CsrGPvaKr78OYsR3WKYf/cArureFoDmoYHnH+LVdvjxeaMl3vICuHeFhLiLTE+dzpzcOee8vb+f4p3J/QgPtnD7nHVsP1roxOqEu3PUqJUJjjiOOLsqezUrduVyKL+USYPjiQyx0DM2ismDE7i2V1vCgy1NO0FJPnx+N+z50egPv/ofPj3platN6jbJuEl+HmKbh/DRPQO5efYabnt7HQumDqSzTLTlk6Rrxc0dyi/hs50VPLp6GdmF5cQ2b8ZtAzoQ4O/HP27q5ZiTHMmATyZC0TG4dhYkTXbMccU5S45Lhj3nv1+HliF8NHUgt8xew8cbDvGUk584Fe5JgtyNfbLhEH/5cjPV1ZrhXVrz3Jg4hl3U+qwP2jRKxofGmpohLWHKUohNctyxxTnbV7CP7MrsRu2b0CqURQ8MISZcfoPyVRLkbmbL4QKCAvy4MCac/gktmDI4nm4Bx7h+lINXna+qgKWPQdociL8Uxs2FsGjHnkOcs+fWPIfVauUWbmnU/r8+qXrYWsqfPsngpXG9iGsR4sgShRuTlXDdRNr+fCbPXc/of61k1o+7AONR9idHd6V5sIPfpsIj8O41RogPfhAmLpQQ9xKFpZVsP1rE+DfXctha2vAOwitIkJtszZ48bpm9hnFvrOGXrAIeGXkRf7uhh/NOuO8nmH0ZZG81FkW+8nnwl1/MvMXFbSP44K4BFJZVcsvsNew/Xv+TrMI7SJCbQGvNr0/Urtmbx/68Yp4a3ZWVjw7jD8MSiWjqCJS6VNsh9UV47zoIjoJ7lsnK9l6qR2wk8+8eQHF5FePeWMOu7CKzSxJOJk0xF9uZXcTzi7cxcWBHruzWhvuGduIPwy4gKKCeR+Wbqigbvrgb9q2AnrfANTMhSBb39WY9Y6P49L5B/G1Jpsxj7gMkyF0kv7iCl7/fyfx1BwgLCuCGPu0BCAl08luwNxU+vwfKi+C6f8Mlt8uj9j4isXU470w2bpKXVdrZfLiAfvEyBa43kiB3gU/SDvHXxdsorrAzcWBHHrqiM81DA5170mo7LH8Rlv8ftOpsLMUWI2OMfdXLP+xkzk/7+OfNvRjTu73Z5QgHkyB3EqMf3FjlRQG94qJ4anRX1zx5V3gUvrgH9v8EvW6Fa/4BgaHOP69wWw8MSyTjoJWHPs6gsLSSiYPizS5JOJDc7HSCndlF3PHOet5dvR8wlg57787+rgnx3T/CG7+Dw+kw9nW4/nUJcUF4sIV5d/bn8i4xPLVoK6/+uAtHTWEtzCdB7kBFZZU8s2gLV836iU2HrDQLNG5gKqVQzu6XtlcZE159cCOERsM9KdD7VueeUzjMpG6TGB4x3KnnCLb488btfbihT3vmrtpHrq3cqecTriNdKw6yevdx/vTpJrILy7htQEceHtGZFs7uB/9V3h5j2tms9caEV1f9HwTKU32epLFzrZyvAH8//jGuF4etpbQOD0ZrTbU2ZlMUnkuC3EH8/RSRzSz857Y+XNLBRSudaw1p78B3T4K/BW6cAz3GuebcwqGaMtfK+fLzUycf33/lh11sOVzAqxMuITRI4sBTSddKI2mt+XrTEV6teZx+QKeWLHnwUteFeNExmH8TfDMd4gbA/WskxD3Yc2ueY0HeApefNzo8iJQdOdw8ew3HCspcfn7hGBLkjZBdWMY976Xzx49+ZllmDpX2asBo6bjE1i/hPwNh/0pjGbbbv4BIGVLmyab1mca1Ude6/Ly3D+zI25P6sv94MWNeW8mWwwUur0E0nQT5edBa8/GGg1wxczk/7crliasv5rP7BmFx5LSy9Sk9YTzc8+lkaJ4A9/0EA6aCn7yNnq536950Cu5kyrmHd4nh0/sG46cUt761loLSSlPqEI0nnWLnIetEKU8t2solcVG8eGNP4lu5cFjfnhRY+HuwZUPyX+DSPxn94sIrZORksLdsL8kkm3L+ru0iWPSHIWw8aCWymfxceRoJ8gZorVmzJ4/Bia2IaxHCl78fzMVtIlzXjVJRQuKuNyH1G2h5Idz9PbSXxR+8zayNs7BardzJnabV0DoimFHd2wCwdMtRVu3O45lruzp2IRPhFPIO1SO/uIJ730/n1rfXsWJnLgDd2kW6LsT3LIM3hhB7+BsYcJ+xGLKEuHCB7UeLeH/tAaa8u4HCMulqcXcS5Gfx065cRr2ygpQdOTxx9cX8LrGV605elA2f3QXvXw8oMno9D1e9KGPDhcs8PKIzL97YgzV78hj3+moO5ZeYXZKohwR5HV75YScT56wnopmFhX8Ywj2XdXJNK7zaDuvfgn/3g+1fwdDH4P7VWJv3dP65hTjDLf068N6d/TlWUMb1/1lFTpEMT3RX0kdeh8TWYUwc2JHHr7745GP2Tnd0k7EI8uF0SBhqzBneKtE15xbiLAYntuKL3w9h6ZajtJbFnd2WBDnGDc0P1h4AYOKgeEb3bMfonu1cc/LyIkh5Ada9bqxkf8Nb0OMmmTNcuI3E1mE8MPxCALYdKeTLn7P4n1FdXDfsVjTI59+J47Zy7p6XxlOLtrJi13HXzQinNWz/Gl4bAGtfgz6T4IEN0PNmCXHhtpbvzOWtn/Zx+9vrOC6TbrkNn26Rr9x13JifuaySZ67tyqRB8c6fpRDg2Bb48VnY9R3EdDcWQY7r7/zzCtFE9ydfQJvIIB77fDPX/Wslb0xMomdslNll+TyfbZEfyi9h0tz1RIVY+OqBIUwZkuD8G5r5++CLqcZ84QfXwZV/hanLJcSFR7n+klg+v38wSinGvbGGjQdPmF2Sz/O5FnlZpZ1giz9xLUJ47dY+XNa5lfPXzbTlwIqXIG0u+PnDkGnGR4isnygM0/pMY+PGjWaXcc66t4/kqweG8OZPe+nRPtLscnyeT7XIV+85TvJLqazecxyAUd3bODfEywqMxR5m9YINc6DPRHgwA0Y8KyEuTmPmXCuN1TIsiL9cdTEWfz/ybOVMW/Cz9JubxCda5NXVmtdSdvPyDzuJbxXq/AUfKkth/Zuw8mVjoqvuN8KwJ6DlBc49r/BYZs+10lRbjxSydMsxNuzLl35zE3h9i/y4rZxJc9fzz+93cl2vdnz9wO/o0ibCOS2DUeYAAA60SURBVCerLDUWeni1D3z/tPE4/b0rYNw7EuKiXrM2zuJr69dml9Fol3WOPq3f/OMNB80uyad4fYv8m1+Osm5fPi/c0IPx/eKcMyrFegjS5kD6u0YLPLY/3PgWxP/O8ecSXunpQU+zfv16s8tokl/7zactyODRzzdTUmFnypAEs8vyCV4Z5NXVmv15xXSKDuOOQR0Z2jna8VPOag0HVsO6NyDzG0BDl2ug/71GgMtYcHEeEiITOGA5YHYZTdYyLIh5d/bnzRV7GdNbFjtxFa8L8oKSSqZ/ksGG/fn8+KdkosODHBvilaWw+TNYNxuyN0NwFAx+APrdDVEdHHce4VNSD6WyuWSzx/aRn8rfT3F/stGVWGmv5t730xnfL44ru7UxuTLv5VVBvuVwAffPT+dYQRlPXtOVVmEOvKlZkAUb3ob0eVCaD627wbWvGo/Ty6yEoonmbZ2HtdDKH/mj2aU4VEFpJblF5Ux9P517h3bikSsvkvnNncBrgvyTtEM8tXALLUID+fjeQfRxxCLI+XuNbpPti+HQOqO75KKrjbnBpftEiAa1Cgvi0/sG8dzibcxevpeMg1b+deslMgGXg3lFkP+6ik/f+Oa8Ov4SWoYFNfZAcOyX38I7Z6vx/ZgekPwY9L5Vuk+EOE/BFn/+dn0Pkjo054mFm3lg/s98ct8gs8vyKh4d5IfyS6i0V9MpOowXbuiBxd8P//N9zL7aDgfXGOGduRisBwEFHQbByL8ZNzCbxzujfCF8yo1JsXRr/9vQ34qqaqpdNUmdl3NIkCulRgGzAH/gba313x1x3Pqk7MjhoQUZJLYO47P7BhFsOYd5w7WGE/uNVvfRX4w5wA+nG33e/kHQKRkuewQ6XwVh0U6+AiF8z6nPcDzz1RYW/1zC5dk/M/SiaC69MJpWjf1t2sc1OciVUv7Aa8AIIAvYoJT6Smu9ranHrku11sz8fif/WraLLm0imHlzr7rHhturIG+XEdZHfzHC+9gvxmPzAMoforvARVfBhSMg8QoICndGyUKIM2itufTCaPZnHeGnXcdZmHEEpeCKi2N4646+J7dxyWykXsARLfL+wG6t9V4ApdQCYAzg8CAvOrydFWvXcKKoiH92tHBt51AsaUuhzAqlViOky6xQWgDFOVBVszRVQLAxXWz3G6FNT2jb0xh1YpEbLkKYQSnF1T3aEpK3g8suG8rWI4Us35lzcrEKrTVXvryCzjHhXNa5Fe2jjJFhHVuGENcihLJKO2n7a8+6mBAdSvuoZhSXV/HzQWut1xNbh9EmMpjCskp+OVRQ6/WL2oQTHR7EieIKth4prPV613YRtAgN5LitnMyjRbVe7xEbSWQzCzmFZezMttV6vXcH50xdoJq6kIJSahwwSmt9d83XE4EBWusHzthuKjAVICYmJmnBggXnfa4LdrxO3NGlp33P7hdMVUAolZYwqgJCaz7CqAiMpDg0gaLwTpQ2a4/2c9GSbU5gs9kICwszuwyX8rVrnnVsFna7nentp5tdikud7X0uq9LM317B5uN2rOW/ZdQNF1q47oJA8kqr+dPy0lr7TegSyMh4C4dt1TyxsvbrU7oHMjTWwh6rnefX1l6D9Pe9gujfNoCtx+28lFb79elJQfSMDiA9u4p//Vx7grDHBwTTubk/qw5X8tbmilqvPzs4mJZ+pY3+2R42bFi61rrvmd93RJDfBIw8I8j7a63POiC2b9++Oi0t7fxPlreHtJU/0HfI5dAsCoIiIMDJE2C5gdTUVJKTk80uw6V87ZqnLJ2C1Wrly/Ffml2KSzX0Pmut+U/6B1wcOYRwSxRbCn9kxZElVGtNcbm91vZBAX4EBvjxtyEvkZXnx8pj/2XVsaU82nsWAOvyPic9dzX2ak1JRe39gy1+WPz9eGXom+zMLmLpoQXsKdzKH7o9D8CP2XPZcWILVXZNaWXt/UMC/WnZrDlP9Ps7+44X89neN7FVFTC58yMALDo0iyvswxr9s62UqjPIHdG1kgXEnfJ1LHDEAcetreUF2CIPyaLEwut4w1wrzqCUIu34Mkp1Nn/u92cO77YA4KcU4cFnj69giz/94ptzuCqUX6wB9Is3po3eajP29/erf//IZhb6xbdgqy2E/KrAk/uvyjN+sw/wV4T7n33/VmFBtAoLYlVeMNbyspP7f3NEQe38bzqtdZM+MP4z2AskAIHAJqBbffskJSXpxkpJSWn0vp5Krtk3yDWfZZuDKTrlYMPbeYqmvM9Amq4jU5vcItdaVymlHgC+xRh++I7WemtTjyuEL/GmuVYcLTku2ewS3J5DxpFrrZcASxxxLCF8kbfOteII+wr2AcYMkaJuHv1kpxDeYmbyTFatWmV2GW7puTXPATB31FyTK3FfMg2ZEG6geXBzwvx9Z7ilcCwJciHcwMLdC1lrW2t2GcJDSdeKEG5g0e5FWG21n0QU4lxIi1wIITycBLkQQng4CXIhhPBwEuRCCOHhJMiFEMLDyagVIYRbm9RtktkluD0JciGEW5O5VhomXStCCLe2r2DfyflWRN2kRS6EG/DFuVY+3fkpHx77kHlL59X5+rQ+0+jdujcz02Ziq7TJXCv1kCAXwg344lwrS/Yu4XDFYaKofx3Lu3rcxS7rLhdV5ZkkyIVwAwt3LyTTlulz85G3D2zfYEu7d+ve9G7d20UVeSYJciHcgC/OtTKtzzQ2btxodhleQYJcCDcwd9RcUlNTzS7DpXq37o012Lf+83IWGbUihDBFRk4Ge8v2ml2GV5AgF8INvLvlXX4s+NHsMlxq1sZZfG392uwyvIJ0rQjhBpZnLcda6lvdDE8Pepr169ebXYZXkBa5EMIUCZEJxFhizC7DK0iQCyFMkXoolc0lm80uwytIkAshTDFv6zyWFS4zuwyvIEEuhBAeToJcCCE8nAS5EEJ4OAlyIYTwcBLkQgjh4eSBICHcgC/OtSIcR1rkQgjh4STIhXADvjjXinAc6VoRwg1syt1EbkUuAK+kv8Km3E1n3fbqTldzU+ebXFWa08hcK44jLXIh3MDLw17m7ui7G9xuR/4Oluxd4oKKnE/mWnEcaZEL4WYeSnrorK89nPKwCytxrl/nWvG15e2cQYJcCA/y8rCXzS7BYeZtnYe10Mof+aPZpXg8CXIhhClmJs9k1apVZpfhFaSPXAgP8kr6K7yS/orZZThE8+DmhPmHmV2GV5AgF8KDWMutWMu9YyWhhbsXsta21uwyvIJ0rQjhQWYMnmF2CQ6zaPcirDbv+E/JbE1qkSulblJKbVVKVSul+jqqKCGEEOeuqV0rW4AbgBUOqEUI0YAZq2cwY/UMs8sQbqZJXSta6+0ASinHVCOEqNeBwgPsyN/BgcIDdb7eMaLjye6XGatnEBUUdXJc+sMpDzfYv94rutdp2/eK7sXk7pMBmLJ0SoP1DY0detr2YxLHMDZxLCfKTjA9dfpp2+7I30GMnzwQ5Agu6yNXSk0FpgLExMQ0eqY3m83mc7PEyTX7hnO55sTKRKx+VqzWugM5sDjw5DGO5h2l0K+Q1CLj69zjuRTbi+s9/sHSg6dtv6dwD6nHja/Pds5T7Sk/ffvMzExSs1Kx2W219o/xi6FHQA95nx1Ba13vB/ADRhfKmR9jTtkmFejb0LF+/UhKStKNlZKS0uh9PZVcs2+Qa/YNTblmIE3XkakNtsi11lc49r8OIYQQjiTjyIUQwsM1dfjh9UqpLGAQ8I1S6lvHlCWEEOJcNXXUypfAlw6qRQghRCNI14oQQng4CXIhhPBwEuRCCOHhJMiFEMLDKWOMuYtPqlQuUPczxg1rBRx3YDmeQK7ZN8g1+4amXHNHrXX0md80JcibQimVprX2qZkW5Zp9g1yzb3DGNUvXihBCeDgJciGE8HCeGORvml2ACeSafYNcs29w+DV7XB+5EEKI03lii1wIIcQpJMiFEMLDeVSQK6VGKaV2KKV2K6UeM7seZ1NKvaOUylFKbTG7FldQSsUppVKUUttrFvWeZnZNzqaUClZKrVdKbaq55mfNrslVlFL+SqmflVKLza7FFZRS+5VSm5VSGUqpNIce21P6yJVS/sBOYASQBWwAJmitt5lamBMppS4DbMB7WuvuZtfjbEqptkBbrfVGpVQ4kA6M9fL3WAGhWmubUsoCrASmaa3Xmlya0ymlpgN9gQit9Wiz63E2pdR+jJXUHP4AlCe1yPsDu7XWe7XWFcACYIzJNTmV1noFkG92Ha6itT6qtd5Y83kRsB1ob25VzlWzgpet5ktLzYdntK6aQCkVC1wDvG12Ld7Ak4K8PXDolK+z8PJ/5L5MKRUPXAKsM7cS56vpYsgAcoDvtdZef83AK8D/ANVmF+JCGvhOKZVesxi9w3hSkKs6vuf1LRdfpJQKAz4HHtJaF5pdj7Npre1a695ALNBfKeXV3WhKqdFAjtY63exaXGyI1roPcBXwh5quU4fwpCDPAuJO+ToWOGJSLcJJavqJPwfma62/MLseV9JaW4FUYJTJpTjbEOC6mj7jBcBwpdQH5pbkfFrrIzV/5mCsrNbfUcf2pCDfAFyolEpQSgUC44GvTK5JOFDNjb85wHat9Uyz63EFpVS0Uiqq5vNmwBVAprlVOZfW+i9a61itdTzGv+NlWuvbTS7LqZRSoTU38FFKhQJXAg4bjeYxQa61rgIeAL7FuAn2idZ6q7lVOZdS6iNgDXCRUipLKXWX2TU52RBgIkYLLaPm42qzi3KytkCKUuoXjMbK91prnxiO52NigJVKqU3AeuAbrfVSRx3cY4YfCiGEqJvHtMiFEELUTYJcCCE8nAS5EEJ4OAlyIYTwcBLkQgjh4STIhaihlIpSSv3e7DqEOF8S5EL8JgqQIBceR4JciN/8Hbig5kGkl8wuRohzJQ8ECVGjZsbFxb4w97vwLtIiF0IIDydBLoQQHk6CXIjfFAHhZhchxPmSIBeihtY6D1illNoiNzuFJ5GbnUII4eGkRS6EEB5OglwIITycBLkQQng4CXIhhPBwEuRCCOHhJMiFEMLDSZALIYSH+39B0fcpL3zLmgAAAABJRU5ErkJggg==\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "\n",
+    "T = 5. # Time horizon\n",
+    "N = 30 # number of control intervals\n",
+    "u_m = 1\n",
+    "\n",
+    "# Declare model variables\n",
+    "x1 = MX.sym('x1')\n",
+    "x0 = MX.sym('x0')\n",
+    "x = vertcat(x0, x1)\n",
+    "u = MX.sym('u')\n",
+    "\n",
+    "# Model equations\n",
+    "xdot = vertcat(u-sin(x1), x0)\n",
+    "\n",
+    "# Objective term\n",
+    "L = cos(x1)\n",
+    "\n",
+    "# Formulate discrete time dynamics\n",
+    "if False:\n",
+    "    # CVODES from the SUNDIALS suite\n",
+    "    dae = {'x':x, 'p':u, 'ode':xdot, 'quad':L}\n",
+    "    opts = {'tf':T/N}\n",
+    "    F = integrator('F', 'cvodes', dae, opts)\n",
+    "else:\n",
+    "    # Fixed step Runge-Kutta 4 integrator\n",
+    "    M = 4 # RK4 steps per interval\n",
+    "    DT = T/N/M\n",
+    "    f = Function('f', [x, u], [xdot, L])\n",
+    "    X_0 = MX.sym('X_0', 2)\n",
+    "    U = MX.sym('U')\n",
+    "    X = X_0\n",
+    "    Q = 0\n",
+    "    for j in range(M):\n",
+    "        k1, k1_q = f(X, U)\n",
+    "        k2, k2_q = f(X + DT/2 * k1, U)\n",
+    "        k3, k3_q = f(X + DT/2 * k2, U)\n",
+    "        k4, k4_q = f(X + DT * k3, U)\n",
+    "        X=X+DT/6*(k1 +2*k2 +2*k3 +k4)\n",
+    "        Q = Q + DT/6*(k1_q + 2*k2_q + 2*k3_q + k4_q)\n",
+    "    F = Function('F', [X_0, U], [X, Q],['x_0','p'],['xf','qf'])\n",
+    "\n",
+    "# Evaluate at a test point\n",
+    "Fk = F(x_0=[0.,0.],p=0.)\n",
+    "print(Fk['xf'])\n",
+    "print(Fk['qf'])\n",
+    "\n",
+    "# Start with an empty NLP\n",
+    "w=[]\n",
+    "w0 = []\n",
+    "lbw = []\n",
+    "ubw = []\n",
+    "J = 0\n",
+    "g=[]\n",
+    "lbg = []\n",
+    "ubg = []\n",
+    "\n",
+    "# Formulate the NLP\n",
+    "Xk = MX([0, 0])\n",
+    "for k in range(N):\n",
+    "    # New NLP variable for the control\n",
+    "    Uk = MX.sym('U_' + str(k))\n",
+    "    w += [Uk]\n",
+    "    lbw += [-u_m]\n",
+    "    ubw += [u_m]\n",
+    "    w0 += [0]\n",
+    "\n",
+    "    # Integrate till the end of the interval\n",
+    "    Fk = F(x_0=Xk, p=Uk)\n",
+    "    Xk = Fk['xf']\n",
+    "    J=J+Fk['qf']\n",
+    "\n",
+    "    # Add inequality constraint\n",
+    "    g += [Xk[0]]\n",
+    "#    lbg += [-.25]\n",
+    "    ubg += [inf]\n",
+    "\n",
+    "# Create an NLP solver\n",
+    "prob = {'f': J, 'x': vertcat(*w), 'g': vertcat(*g)}\n",
+    "solver = nlpsol('solver', 'ipopt', prob)\n",
+    "\n",
+    "# Solve the NLP\n",
+    "sol = solver(x0=w0, lbx=lbw, ubx=ubw, lbg=lbg, ubg=ubg)\n",
+    "w_opt = sol['x']\n",
+    "\n",
+    "# Plot the solution\n",
+    "u_opt = w_opt\n",
+    "x_opt = [[0, 0]]\n",
+    "for k in range(N):\n",
+    "    Fk = F(x_0=x_opt[-1], p=u_opt[k])\n",
+    "    x_opt += [Fk['xf'].full()]\n",
+    "x1_opt = [r[0] for r in x_opt]\n",
+    "x2_opt = [r[1] for r in x_opt]\n",
+    "\n",
+    "tgrid = [T/N*k for k in range(N+1)]\n",
+    "\n",
+    "\n",
+    "plt.figure(1)\n",
+    "plt.clf()\n",
+    "plt.plot(tgrid, x1_opt, '--')\n",
+    "plt.plot(tgrid, x2_opt, '-')\n",
+    "plt.step(tgrid, vertcat(DM.nan(1), u_opt), '-.')\n",
+    "plt.xlabel('t')\n",
+    "plt.legend(['x0','x1','u'])\n",
+    "plt.grid()\n"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "markdown",
+   "metadata": {},
+   "source": [
+    "## Examples"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 62,
+   "metadata": {},
+   "outputs": [
+    {
+     "name": "stdout",
+     "output_type": "stream",
+     "text": [
+      "This is Ipopt version 3.12.3, running with linear solver mumps.\n",
+      "NOTE: Other linear solvers might be more efficient (see Ipopt documentation).\n",
+      "\n",
+      "Number of nonzeros in equality constraint Jacobian...:      100\n",
+      "Number of nonzeros in inequality constraint Jacobian.:        0\n",
+      "Number of nonzeros in Lagrangian Hessian.............:     1275\n",
+      "\n",
+      "Total number of variables............................:       50\n",
+      "                     variables with only lower bounds:        0\n",
+      "                variables with lower and upper bounds:       50\n",
+      "                     variables with only upper bounds:        0\n",
+      "Total number of equality constraints.................:        2\n",
+      "Total number of inequality constraints...............:        0\n",
+      "        inequality constraints with only lower bounds:        0\n",
+      "   inequality constraints with lower and upper bounds:        0\n",
+      "        inequality constraints with only upper bounds:        0\n",
+      "\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "   0  8.0000000e+00 6.00e+00 2.18e-01  -1.0 0.00e+00    -  0.00e+00 0.00e+00   0\n",
+      "   1  4.4571215e+00 1.99e+00 7.48e+00  -1.0 1.36e+00    -  7.29e-02 6.56e-01f  1\n",
+      "   2  6.2675183e+00 1.36e-01 1.12e+00  -1.0 3.67e-01    -  7.14e-01 1.00e+00h  1\n",
+      "   3  5.8176525e+00 3.50e-03 1.63e-02  -1.0 5.62e-02    -  1.00e+00 1.00e+00f  1\n",
+      "   4  5.7290277e+00 1.54e-03 1.37e-01  -2.5 3.52e-02    -  8.92e-01 1.00e+00f  1\n",
+      "   5  5.6471420e+00 2.49e-03 9.22e-04  -2.5 4.57e-02    -  1.00e+00 1.00e+00f  1\n",
+      "   6  5.6147815e+00 5.89e-04 1.03e-02  -3.8 2.19e-02    -  9.09e-01 1.00e+00h  1\n",
+      "   7  5.6049266e+00 7.09e-05 6.43e-05  -3.8 9.85e-03    -  1.00e+00 1.00e+00h  1\n",
+      "   8  5.6017752e+00 1.26e-05 9.10e-04  -5.7 6.58e-03    -  9.58e-01 1.00e+00h  1\n",
+      "   9  5.6012230e+00 1.08e-06 2.81e-06  -5.7 3.63e-03    -  1.00e+00 1.00e+00h  1\n",
+      "iter    objective    inf_pr   inf_du lg(mu)  ||d||  lg(rg) alpha_du alpha_pr  ls\n",
+      "  10  5.6011546e+00 1.34e-07 3.79e-07  -5.7 1.88e-03    -  1.00e+00 1.00e+00h  1\n",
+      "  11  5.6011333e+00 2.45e-08 4.36e-06  -8.6 9.00e-04    -  9.98e-01 1.00e+00h  1\n",
+      "  12  5.6011327e+00 2.19e-09 3.47e-09  -8.6 2.62e-04    -  1.00e+00 1.00e+00h  1\n",
+      "  13  5.6011327e+00 2.06e-11 3.01e-11  -8.6 2.55e-05    -  1.00e+00 1.00e+00h  1\n",
+      "  14  5.6011326e+00 2.84e-14 4.77e-14 -11.0 6.98e-07    -  1.00e+00 1.00e+00h  1\n",
+      "\n",
+      "Number of Iterations....: 14\n",
+      "\n",
+      "                                   (scaled)                 (unscaled)\n",
+      "Objective...............:   5.6011326312042575e+00    5.6011326312042575e+00\n",
+      "Dual infeasibility......:   4.7693069538691396e-14    4.7693069538691396e-14\n",
+      "Constraint violation....:   2.8421709430404007e-14    2.8421709430404007e-14\n",
+      "Complementarity.........:   1.0058102733268378e-11    1.0058102733268378e-11\n",
+      "Overall NLP error.......:   1.0058102733268378e-11    1.0058102733268378e-11\n",
+      "\n",
+      "\n",
+      "Number of objective function evaluations             = 15\n",
+      "Number of objective gradient evaluations             = 15\n",
+      "Number of equality constraint evaluations            = 15\n",
+      "Number of inequality constraint evaluations          = 0\n",
+      "Number of equality constraint Jacobian evaluations   = 15\n",
+      "Number of inequality constraint Jacobian evaluations = 0\n",
+      "Number of Lagrangian Hessian evaluations             = 14\n",
+      "Total CPU secs in IPOPT (w/o function evaluations)   =      0.017\n",
+      "Total CPU secs in NLP function evaluations           =      0.095\n",
+      "\n",
+      "EXIT: Optimal Solution Found.\n",
+      "      solver  :   t_proc      (avg)   t_wall      (avg)    n_eval\n",
+      "       nlp_f  |  57.00us (  3.80us)  53.00us (  3.53us)        15\n",
+      "       nlp_g  |   1.38ms ( 92.27us)   1.39ms ( 92.67us)        15\n",
+      "  nlp_grad_f  |  64.00us (  4.00us)  61.00us (  3.81us)        16\n",
+      "  nlp_hess_l  |  89.44ms (  6.39ms)  89.26ms (  6.38ms)        14\n",
+      "   nlp_jac_g  |   4.20ms (262.37us)   4.21ms (262.94us)        16\n",
+      "       total  | 127.46ms (127.46ms) 125.88ms (125.88ms)         1\n"
+     ]
+    },
+    {
+     "data": {
+      "image/png": "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\n",
+      "text/plain": [
+       "<Figure size 432x288 with 1 Axes>"
+      ]
+     },
+     "metadata": {
+      "needs_background": "light"
+     },
+     "output_type": "display_data"
+    }
+   ],
+   "source": [
+    "# Control\n",
+    "u = MX.sym(\"u\")\n",
+    "\n",
+    "# State\n",
+    "x = MX.sym(\"x\",3)\n",
+    "s = x[0] # position\n",
+    "v = x[1] # speed\n",
+    "m = x[2] # mass\n",
+    "\n",
+    "# ODE right hand side\n",
+    "sdot = v\n",
+    "vdot = (u - 0.05 * v*v)/m\n",
+    "mdot = -0.1*u*u\n",
+    "xdot = vertcat(sdot,vdot,mdot)\n",
+    "\n",
+    "# ODE right hand side function\n",
+    "f = Function('f', [x,u],[xdot])\n",
+    "\n",
+    "# Integrate with Explicit Euler over 0.2 seconds\n",
+    "dt = 0.01  # Time step\n",
+    "xj = x\n",
+    "for j in range(20):\n",
+    "    fj = f(xj,u)\n",
+    "    xj += dt*fj\n",
+    "\n",
+    "# Discrete time dynamics function\n",
+    "F = Function('F', [x,u],[xj])\n",
+    "\n",
+    "# Number of control segments\n",
+    "nu = 50 \n",
+    "\n",
+    "# Control for all segments\n",
+    "U = MX.sym(\"U\",nu) \n",
+    " \n",
+    "# Initial conditions\n",
+    "X0 = MX([0,0,1])\n",
+    "\n",
+    "# Integrate over all intervals\n",
+    "X=X0\n",
+    "for k in range(nu):\n",
+    "    X = F(X,U[k])\n",
+    "\n",
+    "# Objective function and constraints\n",
+    "J = mtimes(U.T,U) # u'*u in Matlab\n",
+    "G = X[0:2]     # x(1:2) in Matlab\n",
+    "\n",
+    "# NLP\n",
+    "nlp = {'x':U, 'f':J, 'g':G}\n",
+    " \n",
+    "# Allocate an NLP solver\n",
+    "opts = {\"ipopt.tol\":1e-10, \"expand\":True}\n",
+    "solver = nlpsol(\"solver\", \"ipopt\", nlp, opts)\n",
+    "arg = {}\n",
+    "\n",
+    "# Bounds on u and initial condition\n",
+    "arg[\"lbx\"] = -0.5\n",
+    "arg[\"ubx\"] =  0.5\n",
+    "arg[\"x0\"] =   0.4\n",
+    "\n",
+    "# Bounds on g\n",
+    "arg[\"lbg\"] = [10,0]\n",
+    "arg[\"ubg\"] = [10,0]\n",
+    "\n",
+    "# Solve the problem\n",
+    "res = solver(**arg)\n",
+    "\n",
+    "# Get the solution\n",
+    "plt.plot(res[\"x\"])\n",
+    "plt.plot(res[\"lam_x\"])\n",
+    "plt.grid()"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": 63,
+   "metadata": {},
+   "outputs": [
+    {
+     "data": {
+      "text/plain": [
+       "{'f': DM(5.60113),\n",
+       " 'g': DM([10, -1.42421e-14]),\n",
+       " 'lam_g': DM([-1.08265, 5.01133]),\n",
+       " 'lam_p': DM([]),\n",
+       " 'lam_x': DM([0.210668, 0.164185, 0.119534, 0.0766077, 0.0352998, 3.75497e-09, 3.50414e-10, 1.84892e-10, 1.2532e-10, 9.44397e-11, 7.54144e-11, 6.24196e-11, 5.29054e-11, 4.55784e-11, 3.97126e-11, 3.4869e-11, 3.07664e-11, 2.72161e-11, 2.40866e-11, 2.12831e-11, 1.87351e-11, 1.6389e-11, 1.42024e-11, 1.2141e-11, 1.0176e-11, 8.28224e-12, 6.43684e-12, 4.6179e-12, 2.80344e-12, 9.70292e-13, -9.07138e-13, -2.85833e-12, -4.91856e-12, -7.13148e-12, -9.55289e-12, -1.22562e-11, -1.53412e-11, -1.89476e-11, -2.32788e-11, -2.86434e-11, -3.55342e-11, -4.47907e-11, -5.79689e-11, -7.83135e-11, -1.13896e-10, -1.91889e-10, -4.96875e-10, -0.0151166, -0.0626596, -0.107781]),\n",
+       " 'x': DM([0.5, 0.5, 0.5, 0.5, 0.5, 0.497328, 0.474746, 0.453265, 0.432716, 0.412943, 0.393802, 0.375159, 0.35689, 0.338877, 0.321013, 0.303192, 0.285318, 0.267299, 0.249047, 0.230481, 0.211523, 0.192101, 0.172148, 0.151603, 0.130411, 0.108524, 0.0859013, 0.0625094, 0.0383253, 0.0133351, -0.0124636, -0.0390617, -0.0664371, -0.0945538, -0.123361, -0.152793, -0.182766, -0.213181, -0.243922, -0.274855, -0.305829, -0.336674, -0.367208, -0.397231, -0.426529, -0.454878, -0.482042, -0.5, -0.5, -0.5])}"
+      ]
+     },
+     "execution_count": 63,
+     "metadata": {},
+     "output_type": "execute_result"
+    }
+   ],
+   "source": [
+    "res"
+   ]
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  },
+  {
+   "cell_type": "code",
+   "execution_count": null,
+   "metadata": {},
+   "outputs": [],
+   "source": []
+  }
+ ],
+ "metadata": {
+  "kernelspec": {
+   "display_name": "Python 3",
+   "language": "python",
+   "name": "python3"
+  },
+  "language_info": {
+   "codemirror_mode": {
+    "name": "ipython",
+    "version": 3
+   },
+   "file_extension": ".py",
+   "mimetype": "text/x-python",
+   "name": "python",
+   "nbconvert_exporter": "python",
+   "pygments_lexer": "ipython3",
+   "version": "3.7.3"
+  }
+ },
+ "nbformat": 4,
+ "nbformat_minor": 2
+}
