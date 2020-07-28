@@ -301,7 +301,7 @@ We know, from the manufacturer and experiments, that the maximum speed of any mo
 	\captionof{figure}{Max speed in gamma}
 	\label{fig:max_vr_gamma}
 \end{figure}
-
+We can confirm that the maximum speed depends on the direction, and observe that the maximum speed is largest when it is parallel to the X or Y axes.
 
 \section*{Accelerated movement}
 
@@ -325,9 +325,33 @@ If we integrate the power for $t$, we get the energy produced by the wheels axes
 
 $$E_{mec} = \frac{2 I_{w} v^{2}}{r^{2}} + \frac{m v^{2}}{2}$$
 
-Which we can observe that is exactly the kinetic energy of the robot. We can also oberve that, even if the movement of the wheels depend on the direction, due to the geometry of the robot, the total kinetic energy does not. This result confirms that, in absence of friction, all of the energy provided by the wheels axes converts into kinetic energy.
+Which we can observe that is exactly the kinetic energy of the robot. We can also oberve that, even if the movement of the wheels depend on the direction, due to the geometry of the robot, the total kinetic energy does not. 
 
+\subsection*{General case}
 
+We can take a step further and consider a completely general case:
+$$\ddot{\q_r} = \left[\begin{matrix}\ddot{x}\\\ddot{y}\\\ddot{\psi}\end{matrix}\right], \ \dot{\q_r} \left[\begin{matrix}\dot{x}\\\dot{y}\\\dot{\psi}\end{matrix}\right]$$
+
+Again:
+
+$$ \R^{-1T} \vec H \ddot{\q_r} =\Torque$$
+
+Operating, we get: 
+$$\Torque = \left[\begin{matrix}\frac{\sqrt{2} \left(4 I_{w} + m r^{2}\right) \left(L + l\right) \left(\operatorname{sin}\left(\psi + \frac{\pi}{4}\right) \ddot{x} - \operatorname{cos}\left(\psi + \frac{\pi}{4}\right) \ddot{y}\right) - \left(4 I_{w} \left(L + l\right)^{2} + I_{z} r^{2}\right) \ddot{\psi}}{4 r \left(L + l\right)}\\\frac{\sqrt{2} \left(4 I_{w} + m r^{2}\right) \left(L + l\right) \left(\operatorname{sin}\left(\psi + \frac{\pi}{4}\right) \ddot{y} + \operatorname{cos}\left(\psi + \frac{\pi}{4}\right) \ddot{x}\right) + \left(4 I_{w} \left(L + l\right)^{2} + I_{z} r^{2}\right) \ddot{\psi}}{4 r \left(L + l\right)}\\\frac{\sqrt{2} \left(4 I_{w} + m r^{2}\right) \left(L + l\right) \left(\operatorname{sin}\left(\psi + \frac{\pi}{4}\right) \ddot{y} + \operatorname{cos}\left(\psi + \frac{\pi}{4}\right) \ddot{x}\right) - \left(4 I_{w} \left(L + l\right)^{2} + I_{z} r^{2}\right) \ddot{\psi}}{4 r \left(L + l\right)}\\\frac{\sqrt{2} \left(4 I_{w} + m r^{2}\right) \left(L + l\right) \left(\operatorname{sin}\left(\psi + \frac{\pi}{4}\right) \ddot{x} - \operatorname{cos}\left(\psi + \frac{\pi}{4}\right) \ddot{y}\right) + \left(4 I_{w} \left(L + l\right)^{2} + I_{z} r^{2}\right) \ddot{\psi}}{4 r \left(L + l\right)}\end{matrix}\right] $$
+$$\dot{\q_w} =   \left[\begin{matrix}\left(\frac{\operatorname{sin}\left(\psi\right)}{r} - \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{y} + \left(\frac{\operatorname{sin}\left(\psi\right)}{r} + \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{x} + \frac{\left(- L - l\right) \dot{\psi}}{r}\\\left(- \frac{\operatorname{sin}\left(\psi\right)}{r} + \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{x} + \left(\frac{\operatorname{sin}\left(\psi\right)}{r} + \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{y} + \frac{\left(L + l\right) \dot{\psi}}{r}\\\left(- \frac{\operatorname{sin}\left(\psi\right)}{r} + \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{x} + \left(\frac{\operatorname{sin}\left(\psi\right)}{r} + \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{y} + \frac{\left(- L - l\right) \dot{\psi}}{r}\\\left(\frac{\operatorname{sin}\left(\psi\right)}{r} - \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{y} + \left(\frac{\operatorname{sin}\left(\psi\right)}{r} + \frac{\operatorname{cos}\left(\psi\right)}{r}\right) \dot{x} + \frac{\left(L + l\right) \dot{\psi}}{r}\end{matrix}\right]$$
+
+Operating we finally get:
+$$ P_{mec} = \left[\begin{matrix}\frac{4 I_{w} L^{2} \dot{\psi} \ddot{\psi} + 8 I_{w} L l \dot{\psi} \ddot{\psi} + 4 I_{w} l^{2} \dot{\psi} \ddot{\psi} + 4 I_{w} \dot{x} \ddot{x} + 4 I_{w} \dot{y} \ddot{y} + I_{z} r^{2} \dot{\psi} \ddot{\psi} + m r^{2} \dot{x} \ddot{x} + m r^{2} \dot{y} \ddot{y}}{r^{2}}\end{matrix}\right]$$
+
+If we integrate the power for $t$, we get the energy produced by the wheels axes:
+
+$$E_{mec} = \left[\begin{matrix}\frac{2 I_{w} L^{2} \dot{\psi}^{2}}{r^{2}} + \frac{4 I_{w} L l \dot{\psi}^{2}}{r^{2}} + \frac{2 I_{w} l^{2} \dot{\psi}^{2}}{r^{2}} + \frac{2 I_{w} \dot{x}^{2}}{r^{2}} + \frac{2 I_{w} \dot{y}^{2}}{r^{2}} + \frac{I_{z} \dot{\psi}^{2}}{2} + \frac{m \dot{x}^{2}}{2} + \frac{m \dot{y}^{2}}{2}\end{matrix}\right]$$
+
+Which we can observe that still is exactly the kinetic energy of the robot. We can also oberve that, even in this most general case, the total kinetic energy does not depend on the direction of the movenemt, as every instance of $\dot{x}$ and $\dot{y}$ can be simplified to the module of the velocity through $\dot{x}^2 + \dot{y}^2 = v^2$ and there are no terms dependant on $\psi$.
+$$E_{mec} = \left[\begin{matrix}\frac{2 I_{w} L^{2} \dot{\psi}^{2}}{r^{2}} + \frac{4 I_{w} L l \dot{\psi}^{2}}{r^{2}} + \frac{2 I_{w} l^{2} \dot{\psi}^{2}}{r^{2}} + \frac{2 I_{w} v^{2}}{r^{2}} + \frac{I_{z} \dot{\psi}^{2}}{2} + \frac{m v^{2}}{2}\end{matrix}\right]$$
+
+ This result confirms that, in absence of friction, all of the energy provided by the wheels axes converts into kinetic energy.
+ 
 \section*{Electric Energy considerations}
 
 Lets consider a motorreductor model based on Iñigo's but slightly more detailed:
