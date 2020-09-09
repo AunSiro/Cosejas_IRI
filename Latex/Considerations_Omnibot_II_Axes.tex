@@ -259,18 +259,18 @@ $$ R = \frac{\sqrt{2}}{r}\left[\begin{matrix}1 & 0 & - L_{2}\\0 & 1 & L_{2}\\0 &
 
 We observe that movement on $x_2$ and $y_2$ uncouples.
 
-\subsection*{Definition of $\dot{\q}_2$ and $\ddot{\q}_2$ }
+\subsection*{Definition of $\vec{w}$ and $\vec{a}$ }
 
-Let's define two new concepts: $\dot{\q}_2$ and $\ddot{\q}_2$:
+Let's define two new concepts: $\vec{w}$ and $\vec{a}$:
 
-$$ \dot{\q}_2 \equiv \left[\begin{matrix}\dot{x}_{2}\\\dot{y}_{2}\\\dot{\psi}\end{matrix}\right] = \R_{\psi}^T \dot{\q_r}\ ,\ \ddot{\q}_2 \equiv \left[\begin{matrix}\ddot{x}_{2}\\\ddot{y}_{2}\\\ddot{\psi}\end{matrix}\right] = \R_{\psi}^T \ddot{\q_r}$$
+$$ \vec{w} \equiv \left[\begin{matrix} w_1\\w_2\\\dot{\psi}\end{matrix}\right] \equiv \R_{\psi}^T \dot{\q_r}\ ,\ \vec{a} \equiv \left[\begin{matrix} a_1\\a_2\\\ddot{\psi}\end{matrix}\right] \equiv \R_{\psi}^T \ddot{\q_r}$$
 
-We observe that $\dot{\q}_2$ and $\ddot{\q}_2$ are the proyection on base 2 of the global speeds and accelerations. We must be cautious when using them, because since $\R_{\psi}$ can vary with time, in general $\frac{d\dot{\q}_2}{dt}\neq\ddot{\q}_2$.
-$$\frac{d\dot{\q}_2}{dt} = \frac{d(\R_{\psi}^T \dot{\q_r})}{dt} =  \frac{d(\R_{\psi}^T)}{dt}\dot{\q_r} + \R_{\psi}^T \ddot{\q_r}=  \frac{d(\R_{\psi}^T)}{dt}\dot{\q_r} + \ddot{\q_2}$$
+We observe that  $\vec{w}$ and $\vec{a}$ are the proyection on base 2 of the global speeds and accelerations of the robot's center of mass. We must be cautious when using them, because since $\R_{\psi}$ can vary with time, in general $\frac{d\vec{w}}{dt}\neq\vec{a}$.
+$$\frac{d\vec{w}}{dt} = \frac{d(\R_{\psi}^T \dot{\q_r})}{dt} =  \frac{d(\R_{\psi}^T)}{dt}\dot{\q_r} + \R_{\psi}^T \ddot{\q_r}=  \frac{d(\R_{\psi}^T)}{dt}\dot{\q_r} + \vec{a}$$
 
-Why are then these variables useful? The answer begins with the relationship that connects $\dot{\q_r}$ and $\dot{\q_w}$:
-$$\dot{\q_w} = \R \R_{\psi}^T \dot{\q_r} = \R \dot{\q_2} = \frac{\sqrt{2}}{2}\left[\begin{matrix}- L_{2} \dot{\psi} + \dot{x}_{2}\\L_{2} \dot{\psi} + \dot{y}_{2}\\- L_{2} \dot{\psi} + \dot{y}_{2}\\L_{2} \dot{\psi} + \dot{x}_{2}\end{matrix}\right]$$
-We can observe from this that rotation of wheels 1 and 4 only depend on $\dot{\psi}$ and $\dot{x_2}$, while rotation of wheels 2 and 3 only depend on $\dot{\psi}$ and $\dot{y_2}$.
+Why are then these variables useful? The answer begins with the relationship that connects  $\vec{w}$ and $\dot{\q_w}$:
+$$\dot{\q_w} = \R \R_{\psi}^T \dot{\q_r} = \R \vec{w} = \frac{\sqrt{2}}{2}\left[\begin{matrix}- L_{2} \dot{\psi} + w_1\\L_{2} \dot{\psi} + w_2\\- L_{2} \dot{\psi} + w_2\\L_{2} \dot{\psi} + w_1\end{matrix}\right]$$
+We can observe from this that rotation of wheels 1 and 4 only depend on $\dot{\psi}$ and $w_1$, while rotation of wheels 2 and 3 only depend on $\dot{\psi}$ and $w_2$.
 
 This means that, as the speed of the robot is limited by the maximum speed in any of its wheels' shafts, the envelope of achievable speeds in $x_2$ and $y_2$ will always be a square whose size depends on $\dot{\psi}$:
 \begin{figure}[h]
@@ -295,13 +295,13 @@ Where:
 
 By definition: $ \dot{\q}_2  = \R_{\psi}^T \dot{\q_r}\ ,\ \ddot{\q}_2 = \R_{\psi}^T \ddot{\q_r}$
 
-Which means that also $ \dot{\q}_r  = \R_{\psi} \dot{\q_2}\ ,\ \ddot{\q}_r = \R_{\psi} \ddot{\q_2}$
+Which means that also $ \dot{\q}_r  = \R_{\psi} \vec{w}\ ,\ \ddot{\q}_r = \R_{\psi} \vec{a}$
 
 So we can rewrite the system's equation as
-$$	\vec H \R_{\psi} \ddot{\q_2}+ \vec K \R_{\psi} \dot{\q_2}=\R_{\psi}\R ^T\Torque$$
+$$	\vec H \R_{\psi} \vec{a}+ \vec K \R_{\psi} \vec{w}=\R_{\psi}\R ^T\Torque$$
 
-Multiplying the whole equation rightside by $\R_{\psi}^T$, we get:
-$$ \R_{\psi}^T	\vec H \R_{\psi} \ddot{\q_2}+ \R_{\psi}^T \vec K \R_{\psi} \dot{\q_2}=\R ^T\Torque$$
+Multiplying the whole equation leftside by $\R_{\psi}^T$, we get:
+$$ \R_{\psi}^T	\vec H \R_{\psi} \vec{a}+ \R_{\psi}^T \vec K \R_{\psi} \vec{w}=\R ^T\Torque$$
 Operating, we find that $\R_{\psi}^T	\vec H \R_{\psi} = \vec{H}$ and $\R_{\psi}^T \vec{K} \R_{\psi} = \vec{K}$, so our equation proyected on axes 2 becomes:
 \begin{gather}
 \vec H \ddot \q_2+ \vec K \dot \q_2=\R ^T\Torque \label{eq:axes_2_eq}
@@ -311,44 +311,74 @@ We can use this equation to gain more insight on the nature of the system.
 \section*{Electric power}
 \subsection*{Constant movement without rotation}
 Let's start by assuming a straight uniform movement without rotation:
-$$ \dot{\q_2} = \left[\begin{matrix}\dot{x}_{2}\\\dot{y}_{2}\\0\end{matrix}\right]\ ,\ \dot{\q_w} = \R \dot{\q_2} = \frac{\sqrt{2}}{r} \left[\begin{matrix}\dot{x}_{2}\\\dot{y}_{2}\\\dot{y}_{2}\\\dot{x}_{2}\end{matrix}\right]$$
+$$ \vec{w} = \left[\begin{matrix}w_1\\w_2\\0\end{matrix}\right]\ ,\ \dot{\q_w} = \R \vec{w} = \frac{\sqrt{2}}{r} \left[\begin{matrix}w_1\\w_2\\w_2\\w_1\end{matrix}\right]$$
 
 We remember that the electric motor model looks like this:
 $$ V = K_m N\dot{\phi} + Ri$$
 $$ \tau_m = N K_ei\mu_{trans} - \tau_r$$
-$$ \tau_r = a \dot{\phi} + b·sign(\dot{\phi}) $$
+$$ \tau_r = a \dot{\phi} + b\operatorname{sign}(\dot{\phi}) $$
 And that in straight constant movement the torque output is zero, so that the electric power consumed in a motor is 
 $$ P_m = 0.301 \operatorname{sign}^{2}\left(\dot{\phi}\right) + 0.638 \operatorname{sign}\left(\dot{\phi}\right) \dot{\phi} + 0.016 \dot{\phi}^{2}$$
 We can add the power consumed by all four motors to get 
-$$P_tot = 0.6 \operatorname{sign}^{2}\left(\dot{x}_{2}\right) + 27.05 \operatorname{sign}\left(\dot{x}_{2}\right) \dot{x}_{2} + 0.6 \operatorname{sign}^{2}\left(\dot{y}_{2}\right) + 27.05 \operatorname{sign}\left(\dot{y}_{2}\right) \dot{y}_{2} + 14.17 \dot{x}_{2}^{2} + 14.17 \dot{y}_{2}^{2}$$
+$$P_{tot} = 0.6 \operatorname{sign}^{2}\left(w_1\right) + 27.05 \operatorname{sign}\left(w_1\right) w_1 + 0.6 \operatorname{sign}^{2}\left(w_2\right) + 27.05 \operatorname{sign}\left(w_2\right) w_2 + 14.17 w_1^{2} + 14.17 w_2^{2}$$
 
-Which we can plot over $\dot{x_2}$ and $\dot{y_2}$: 
+Which we can plot over $w_1$ and $w_2$: 
 \begin{figure}[h]
 	\centering
 	\includegraphics[width=.5\linewidth]{power_map_base_2}
-	\captionof{figure}{Total electric power required to keep constat speed}
+	\captionof{figure}{Total electric power required to keep constant speed}
 	\label{fig:power_ct_speed}
 \end{figure}
 
 We can observe that movement is most efficient in the $x_2$ and $y_2$ directions, when only two motors are running, while the least efficient directions are rotated 45 degrees respect to them: the symmetry axes of the robot.
 \subsection*{Constant movement with rotation}
 If our robot keeps a straight movement with constant rotation rate:
-$$ \ddot{\q_2} = \vec{0}\ ,\ \dot{\q_2} = \left[\begin{matrix}\dot{x}_{2}\\\dot{y}_{2}\\\dot{\psi}\end{matrix}\right]\ ,\ \dot{\q_w} = \R \dot{\q_2} = \frac{\sqrt{2}}{r} \left[\begin{matrix}- L_{2} \dot{\psi} + \dot{x}_{2}\\L_{2} \dot{\psi} + \dot{y}_{2}\\- L_{2} \dot{\psi} + \dot{y}_{2}\\L_{2} \dot{\psi} + \dot{x}_{2}\end{matrix}\right]$$
+$$ \vec{a} = \vec{0}\ ,\ \vec{w} = \left[\begin{matrix}w_1\\w_2\\\dot{\psi}\end{matrix}\right]\ ,\ \dot{\q_w} = \R \vec{w} = \frac{\sqrt{2}}{r} \left[\begin{matrix}- L_{2} \dot{\psi} + w_1\\L_{2} \dot{\psi} + w_2\\- L_{2} \dot{\psi} + w_2\\L_{2} \dot{\psi} + w_1\end{matrix}\right]$$
 
 Subtituting in the General equation:
 
 $$\vec H \ddot \q_2+ \vec K \dot \q_2=\vec K \dot \q_2=\R ^T\Torque$$
 
 Multiplying the equation leftside by $\R^{-1T}$:
-$$\Torque=\R^{-1T}\vec K \dot \q_2 = \frac{\sqrt{2}I_w}{r}\left[\begin{matrix}\dot{\psi} \dot{y}_{2}\\- \dot{\psi} \dot{x}_{2}\\- \dot{\psi} \dot{x}_{2}\\\dot{\psi} \dot{y}_{2}\end{matrix}\right]$$
+$$\Torque=\R^{-1T}\vec K \dot \q_2 = \frac{\sqrt{2}I_w}{r}\left[\begin{matrix}\dot{\psi} w_2\\- \dot{\psi} w_1\\- \dot{\psi} w_1\\\dot{\psi} w_2\end{matrix}\right]$$
 
+Now the torque is not zero, but we can use the model to get an expression that models the electric power of a motor as a function of the torque $\tau_m$ and the angular speed $\dot{\phi}$:
+$$P_m = \left(\frac{K_{m} a}{K_{e} \mu} + \frac{R_{e} a^{2}}{K_{e}^{2} \mu^{2} n^{2}}\right) \dot{\phi}^{2} + \left(\frac{K_{m} b \operatorname{sign}\left(\dot{\phi}\right)}{K_{e} \mu} + \frac{K_{m} \tau_{m}}{K_{e} \mu} + \frac{2 R_{e} a b \operatorname{sign}\left(\dot{\phi}\right)}{K_{e}^{2} \mu^{2} n^{2}} + \frac{2 R_{e} a \tau_{m}}{K_{e}^{2} \mu^{2} n^{2}}\right) \dot{\phi} +$$
+$$+ \frac{R_{e} b^{2} \operatorname{sign}^{2}\left(\dot{\phi}\right)}{K_{e}^{2} \mu^{2} n^{2}} + \frac{2 R_{e} b \tau_{m} \operatorname{sign}\left(\dot{\phi}\right)}{K_{e}^{2} \mu^{2} n^{2}} + \frac{R_{e} \tau_{m}^{2}}{K_{e}^{2} \mu^{2} n^{2}}$$
+Or, subtituting the constants with their values:
+$$ P_m = 1.881 \tau_{m}^{2} + 1.505 \tau_{m} \operatorname{sign}\left(\dot{\phi}\right) + \left(1.594 \tau_{m} + 0.638 \operatorname{sign}\left(\dot{\phi}\right)\right) \dot{\phi} + 0.301 \operatorname{sign}^{2}\left(\dot{\phi}\right) + 0.016 \dot{\phi}^{2}$$
+
+If we add the power spent by the four motors substituting in this expression $\tau_m$ and $\dot{\phi}$ by its values functions of $q_2$, we get a function that expresses the total electric power as a function of $w_1$, $w_2$ and $\dot{\psi}$:
+\begin{multline}
+P_{tot} = \displaystyle 0.3 \operatorname{sign}^{2}\left(4.44 \dot{\psi} - 14.99 w_1\right) - 0.08 \operatorname{sign}\left(4.44 \dot{\psi} - 14.99 w_1\right) \dot{\psi} w_2 + \\+4.01 \operatorname{sign}\left(4.44 \dot{\psi} - 14.99 w_1\right) \dot{\psi} - 13.52 \operatorname{sign}\left(4.44 \dot{\psi} - 14.99 w_1\right) w_1 + 0.3 \operatorname{sign}^{2}\left(4.44 \dot{\psi} + 14.99 w_1\right) +\\+ 0.08 \operatorname{sign}\left(4.44 \dot{\psi} + 14.99 w_1\right) \dot{\psi} w_2 + 4.01 \operatorname{sign}\left(4.44 \dot{\psi} + 14.99 w_1\right) \dot{\psi} + 13.52 \operatorname{sign}\left(4.44 \dot{\psi} + 14.99 w_1\right) w_1 +\\+ 0.3 \operatorname{sign}^{2}\left(4.44 \dot{\psi} - 14.99 w_2\right) + 0.08 \operatorname{sign}\left(4.44 \dot{\psi} - 14.99 w_2\right) \dot{\psi} w_1 + 4.01 \operatorname{sign}\left(4.44 \dot{\psi} - 14.99 w_2\right) \dot{\psi} -\\- 13.52 \operatorname{sign}\left(4.44 \dot{\psi} - 14.99 w_2\right) w_2 + 0.3 \operatorname{sign}^{2}\left(4.44 \dot{\psi} + 14.99 w_2\right) - 0.08 \operatorname{sign}\left(4.44 \dot{\psi} + 14.99 w_2\right) \dot{\psi} w_1 +\\+ 4.01 \operatorname{sign}\left(4.44 \dot{\psi} + 14.99 w_2\right) \dot{\psi} + 13.52 \operatorname{sign}\left(4.44 \dot{\psi} + 14.99 w_2\right) w_2 + 0.01 \dot{\psi}^{2} w_1^{2} + 0.01 \dot{\psi}^{2} w_2^{2} +\\+ 2.49 \dot{\psi}^{2} + 14.17 w_1^{2} + 14.17 w_2^{2}
+\end{multline}
+While certainly not very beautiful, this expression contains a lot of information about the influence of the parameters in power consumption. For example, plotting the power over $w_1$ and $w_2$ for different $\dot{\psi}$:
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=.9\linewidth]{power_map_base_2_psi_dot}
+	\captionof{figure}{Total electric power required to keep constant speed}
+	\label{fig:power_ct_speed_psi_dot}
+\end{figure}
+
+We can also try to understand beter this 3-D relationship by slicing through a plane where $w_2=0$ or where $w_1 = w_2$:
+\begin{figure}[h]
+	\centering
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{power_map_y_0}
+		\label{fig:power_y_0}
+	\end{minipage}%
+	\begin{minipage}{.5\textwidth}
+		\centering
+		\includegraphics[width=.9\linewidth]{power_map_y_x}
+		\label{fig:power_y_x}
+	\end{minipage}
+\end{figure}
+
+We can use a combination of both kinds of graphs to see, for example, how power compsumption slowly becomes independent of direction as $\dot{\psi}$ increases, or how the two conditions that spend maximum power are when all the four wheels turn at their maximum speed, either moving the robot in a straight line or rotating in place. We can also check that when $\dot{\psi} = 0$, for any given $w_1$, the power compsumption when $w_1 = w_2$ is exactly twice as when $w_2=0$, even though the total speed achived is only $\sqrt{2}$ times larger.
 \section*{Conclusions}
 
-We can reach maximum speed in directions parallel to the $X_{body}$ and $Y_{body}$ axes.
-
-If we consider only the mechanical model without friction or the motors, all the energy output of the shafts are converted into kinetic energy, with independence of the advence direction.
-
-If we consider also the motors, directions parallel to the body axes require more power than those at 45 degrees.
+We have used the new axes base 2 to gain meaningful insights and understandings of how the Omnibot works and moves.
 % Your references go at the end of the main text, and before the
 % figures.  For this document we've used BibTeX, the .bib file
 % scibib.bib, and the .bst file Science.bst.  The package scicite.sty
