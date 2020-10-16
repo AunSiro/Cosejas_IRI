@@ -270,7 +270,7 @@ $$ P_{e,comp} = 1.881 \tau_{m}^{2} + 1.505 \tau_{m} \operatorname{sign}\left(\do
 We can see that both expressions are functions only of $\tau_{m}$ and $\dot{\phi}$, so it will be interesting to plot them in a 2d graph of both magnitudes as axes. In order to plot only valid values, we need to calculate the envelope of achievable values, that is, maximum and minimum torque at a certain  $\dot{\phi}$. We do so by substituting the value of $V$ by its maximum and minimum value. We are interested in behaviour obtainable in normal conditions, so we will limit our graph in $\dot{\phi}$ only up to the maximum speed that the motor can achieve by itself. Since the expression is symmetric, we can start our graph at zero speed.
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=.5\linewidth]{motor_electric_power_w_and_wout_fricc}
+	\includegraphics[width=.9\linewidth]{motor_electric_power_w_and_wout_fricc}
 	\captionof{figure}{power as function of torque and speed}
 	\label{fig:power_f_tau_speed}
 \end{figure}
@@ -348,7 +348,7 @@ Let's start with a simple case where $w_2$ and $a_2$ are zero. In this case, onl
 
 \begin{figure}[h]
 	\centering
-	\includegraphics[width=.8\linewidth]{total_electric_power_w_and_wout_fricc}
+	\includegraphics[width=1\linewidth]{total_electric_power_w_and_wout_fricc}
 	\captionof{figure}{power as function of acceleration and speed}
 	\label{fig:power_f_a1_w1}
 \end{figure}
@@ -394,9 +394,86 @@ Again, we can observe that the envelope remains unchanged in size and centered i
 
 In the modified model, we can observe that the effect of degeneration into straight lines now applies for both axes: in the range of $a_1$ where power of motors 1 and 4 is zero, lines are horizontal, while in the range of $a_2$ where power of motors 2 and 3 is zero, lines are vertical. In the area in which both happen at the same time, we have a rectangle where power spent is zero.
 
+\subsection{Considering rotation}
+Let's consider a general situation in which apart from its speed in directions $w_1$ and $w_2$, the robot is rotating at a rate $\dot(psi)$. We have the three model expressions that link the electric power as function of $\vec{\Gamma}$ and $\dot\q_w$, but in order to get it as a function of $\dot{\q_r}$ and $\ddot{\q_r}$ we have to take on account additional terms:
+$$ \vec H\vec a+\vec K\vec w=\R^T\Gamma$$
+$$ \vec\Gamma = \R^{-T}(\vec H\vec a+\vec K\vec w)$$
+$$ \vec\Gamma = \frac{\sqrt{2}}{8 L_{2} r} \left[\begin{matrix}2 L_{2} \left(4 I_{w} w_{2} \dot{\psi} + a_{1} \left(4 I_{w} + m r^{2}\right)\right) - \left(8 I_{w} L_{2}^{2} + I_{z} r^{2}\right) \ddot{\psi}\\- 2 L_{2} \left(4 I_{w} w_{1} \dot{\psi} - a_{2} \left(4 I_{w} + m r^{2}\right)\right) + \left(8 I_{w} L_{2}^{2} + I_{z} r^{2}\right) \ddot{\psi}\\- 2 L_{2} \left(4 I_{w} w_{1} \dot{\psi} - a_{2} \left(4 I_{w} + m r^{2}\right)\right) - \left(8 I_{w} L_{2}^{2} + I_{z} r^{2}\right) \ddot{\psi}\\2 L_{2} \left(4 I_{w} w_{2} \dot{\psi} + a_{1} \left(4 I_{w} + m r^{2}\right)\right) + \left(8 I_{w} L_{2}^{2} + I_{z} r^{2}\right) \ddot{\psi}\end{matrix}\right]$$
+$$\vec\Gamma \approx \left[\begin{matrix}0.428 a_{1} + 0.056 w_{2} \dot{\psi} - 0.035 \ddot{\psi}\\0.428 a_{2} - 0.056 w_{1} \dot{\psi} + 0.035 \ddot{\psi}\\0.428 a_{2} - 0.056 w_{1} \dot{\psi} - 0.035 \ddot{\psi}\\0.428 a_{1} + 0.056 w_{2} \dot{\psi} + 0.035 \ddot{\psi}\end{matrix}\right] $$
+$$\dot{\q_w} = \frac{\sqrt{2}}{2}\left[\begin{matrix}- L_{2} \dot{\psi} + w_1\\L_{2} \dot{\psi} + w_2\\- L_{2} \dot{\psi} + w_2\\L_{2} \dot{\psi} + w_1\end{matrix}\right] \approx \left[\begin{matrix}21.2 w_{1} - 6.28 \dot{\psi}\\21.2 w_{2} + 6.28 \dot{\psi}\\21.2 w_{2} - 6.28 \dot{\psi}\\21.2 w_{1} + 6.28 \dot{\psi}\end{matrix}\right]$$
+
+Connecting these expressions through the three different motor models allows us to express the total electric power as a function of the robot speeds and accelerations. Only in the case of the simple model is the resulting expression clear enough to be useful: 
+$$ P_{e, simp} \approx 0.25 a_{1}^{2} + 16.95 a_{1} w_{1} + 0.07 a_{1} w_{2} \dot{\psi} + 0.25 a_{2}^{2} - 0.07 a_{2} w_{1} \dot{\psi} + 16.95 a_{2} w_{2} + 0.82 \dot{\psi} \ddot{\psi} $$
+
+\subsubsection{Acceleration enelope}
+Let's consiger again the general equation and express acceleration as a function of torques:
+$$ \vec H\vec a+\vec K\vec w=\R^T\Gamma$$
+$$ \vec a = \vec H^{-1}(\R^T\vec\Gamma - \vec K \vec w) \approx \left[\begin{matrix}\frac{- 4 I_{w} w_{2} \dot{\psi} + \sqrt{2} r \left(\tau_{1} + \tau_{4}\right)}{4 I_{w} + m r^{2}}\\\frac{4 I_{w} w_{1} \dot{\psi} + \sqrt{2} r \left(\tau_{2} + \tau_{3}\right)}{4 I_{w} + m r^{2}}\\- \frac{\sqrt{2} L_{2} r \left(\tau_{1} - \tau_{2} + \tau_{3} - \tau_{4}\right)}{8 I_{w} L_{2}^{2} + I_{z} r^{2}}\end{matrix}\right]$$
+This expression gives us a very important clue: Maximum and minimum acceleration in direction $w_1$ will always correspond to maximum and minimum torque in motors 1 and 4, and the same can be said about direction $w_2$ and motors 2 and 3. That means that in order to find the acceleration envelope, we can safely substitute in this expression with the values of maximum and minimum voltages.
+
+For the simple model, we get:
+$$\vec a_{max, simp} \approx \left[\begin{matrix}- 68.379 w_{1} - 0.132 w_{2} \dot{\psi} + 50.178\\0.132 w_{1} \dot{\psi} - 68.379 w_{2} + 50.178\\- 247.361 \dot{\psi}\end{matrix}\right]$$
+$$\vec a_{min, simp} \approx \left[\begin{matrix}- 68.379 w_{1} - 0.132 w_{2} \dot{\psi} - 50.178\\0.132 w_{1} \dot{\psi} - 68.379 w_{2} - 50.178\\- 247.361 \dot{\psi}\end{matrix}\right]$$
+$$\vec a_{0V, simp} \approx \left[\begin{matrix}- 68.379 w_{1} - 0.132 w_{2} \dot{\psi}\\0.132 w_{1} \dot{\psi} - 68.379 w_{2}\\- 247.361 \dot{\psi}\end{matrix}\right]$$
+
+We can observe that the difference between the maximum and minimum values remains a constant for any condition, and again te zero-voltage condition is the mean between the two. This means that the acceleration envelope will always be a square centered on the zero-voltage value.
+
+We observe also that the value of $\ddot \psi$ is the same for the three conditions, a negative constant times its current rotational speed. This doesn't mean that this is the only value it can have, but rather that focusing all the power in accelerating in the plane has the same braking effect on the spinning as putting the four motors at zero voltage. We will use this in our graphs, because it represents a constant value of $\ddot \psi$ that we know that we can achieve over the whole area of the envelope. We will consider the relationship between the envelope of accelerations and  $\ddot \psi$ in a later point.
+
+For the complete model, the same conclusions can be achieved, even though  the expressions are quite complicated. Interested readers can find them in Annex 1 
+\subsubsection{Influence of $\dot \psi$ on power}
+We can now plot different combinations of $\dot \psi$, $w_1$ and $w_2$ in order to observe the influence that spinning has on power, Both in the cas of moving at half speed in the direction of $w_1$ in figure \ref{fig:psidot_comp_w1}, and moving at half speed in both directions of $w_1$ and $w_2$ in figure \ref{fig:psidot_comp_w1_w2} : 
+
+In order to be sure that the conditions that we plot are feasible for the robot by its own means, we have to make sure that:
+$$|\frac{\dot \psi}{\dot \psi_{max}}| + |\frac{w_1}{w_{1,max}}| \leq 1 $$
+$$|\frac{\dot \psi}{\dot \psi_{max}}| + |\frac{w_2}{w_{2,max}}| \leq 1 $$
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth]{psidot_comp_w1}
+	\captionof{figure}{power as function of acceleration, moving in $w_1$}
+	\label{fig:psidot_comp_w1}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth]{psidot_comp_w1_w2}
+	\captionof{figure}{power as function of acceleration, moving in $w_1$ and $w_2$}
+	\label{fig:psidot_comp_w1_w2}
+\end{figure}
+
+In both conditions, we can see that the power requisites are not very different for the simple and complete motor models. If we plot the difference in power between the rotation and non-rotation conditions, we can observe that the difference in power is usually between one and three orders of magnitude smaller than the total power. This is shown for movement in direction of $w_1$ in figure \ref{fig:psidot_comp_w1_diff} and for movement in both directions in figure \ref{fig:psidot_comp_w1_w2_diff}.
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth]{psidot_comp_w1_diff}
+	\captionof{figure}{Difference in power as function of acceleration, moving in $w_1$}
+	\label{fig:psidot_comp_w1_diff}
+\end{figure}
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth]{psidot_comp_w1_w2_diff}
+	\captionof{figure}{Difference in power as function of acceleration, moving in $w_1$ and $w_2$}
+	\label{fig:psidot_comp_w1_w2_diff}
+\end{figure}
+
+We can also observe that the modified model gives us shapes that at first glance seem irregular and strange. However, when we plot it in detail, and compare it with the values of the acceleration at which different motors enter the zero-power area, the shape becomes understandable. In figure \ref{fig:comparacion_modelos}, we use a condition where $w_1$ is half the maximum speed and $w_2$, a third. The horizontal lines are the values of $a_2$ at which motors 2 and 3 enter their zero-power area, and vertical lines are the same for motors 1 and 4. Looking closely, we can see that the estrange shapes are a combination of circles, were all motors work normally, ellipses, where only one motor is in the zero-power area, and straight lines, where two motors are there. The outlines of the equivalent conditions for the complete model are shown also as dotted lines in order to help visualization of their differences.
+
+\begin{figure}[h]
+	\centering
+	\includegraphics[width=1\linewidth]{comparacion_modelos}
+	\captionof{figure}{Power as function of acceleration, showing the difference between complete and modified models, moving in $w_1$ and $w_2$}
+	\label{fig:comparacion_modelos}
+\end{figure}
+
 \section*{Conclusions}
 
 Las conclusiones están por concluir. Cuando concluyamos, las conclusiones serán concluidas y dejarán de estar inconclusas.
+\section{Annex 1: complicated expressions}
+
+Maximum, minimum and zero-voltage accelerations for complete model:
+\tiny
+$$\left[\begin{matrix}- 41.523 w_{1} - 0.132 w_{2} \dot{\psi} - 0.467 \operatorname{sign}\left(21.203 w_{1} - 6.285 \dot{\psi}\right) - 0.467 \operatorname{sign}\left(21.203 w_{1} + 6.285 \dot{\psi}\right) + 30.107\\0.132 w_{1} \dot{\psi} - 41.523 w_{2} - 0.467 \operatorname{sign}\left(21.203 w_{2} - 6.285 \dot{\psi}\right) - 0.467 \operatorname{sign}\left(21.203 w_{2} + 6.285 \dot{\psi}\right) + 30.107\\2.853 \operatorname{sign}\left(21.203 w_{1} - 6.285 \dot{\psi}\right) - 2.853 \operatorname{sign}\left(21.203 w_{1} + 6.285 \dot{\psi}\right) + 2.853 \operatorname{sign}\left(21.203 w_{2} - 6.285 \dot{\psi}\right) - 2.853 \operatorname{sign}\left(21.203 w_{2} + 6.285 \dot{\psi}\right) - 150.209 \dot{\psi}\end{matrix}\right]$$
+$$ \left[\begin{matrix}- 41.523 w_{1} - 0.132 w_{2} \dot{\psi} - 0.467 \operatorname{sign}\left(21.203 w_{1} - 6.285 \dot{\psi}\right) - 0.467 \operatorname{sign}\left(21.203 w_{1} + 6.285 \dot{\psi}\right) - 30.107\\0.132 w_{1} \dot{\psi} - 41.523 w_{2} - 0.467 \operatorname{sign}\left(21.203 w_{2} - 6.285 \dot{\psi}\right) - 0.467 \operatorname{sign}\left(21.203 w_{2} + 6.285 \dot{\psi}\right) - 30.107\\2.853 \operatorname{sign}\left(21.203 w_{1} - 6.285 \dot{\psi}\right) - 2.853 \operatorname{sign}\left(21.203 w_{1} + 6.285 \dot{\psi}\right) + 2.853 \operatorname{sign}\left(21.203 w_{2} - 6.285 \dot{\psi}\right) - 2.853 \operatorname{sign}\left(21.203 w_{2} + 6.285 \dot{\psi}\right) - 150.209 \dot{\psi}\end{matrix}\right]$$
+$$\left[\begin{matrix}- 41.523 w_{1} - 0.132 w_{2} \dot{\psi} - 0.467 \operatorname{sign}\left(21.203 w_{1} - 6.285 \dot{\psi}\right) - 0.467 \operatorname{sign}\left(21.203 w_{1} + 6.285 \dot{\psi}\right)\\0.132 w_{1} \dot{\psi} - 41.523 w_{2} - 0.467 \operatorname{sign}\left(21.203 w_{2} - 6.285 \dot{\psi}\right) - 0.467 \operatorname{sign}\left(21.203 w_{2} + 6.285 \dot{\psi}\right)\\2.853 \operatorname{sign}\left(21.203 w_{1} - 6.285 \dot{\psi}\right) - 2.853 \operatorname{sign}\left(21.203 w_{1} + 6.285 \dot{\psi}\right) + 2.853 \operatorname{sign}\left(21.203 w_{2} - 6.285 \dot{\psi}\right) - 2.853 \operatorname{sign}\left(21.203 w_{2} + 6.285 \dot{\psi}\right) - 150.209 \dot{\psi}\end{matrix}\right]$$
 % Your references go at the end of the main text, and before the
 % figures.  For this document we've used BibTeX, the .bib file
 % scibib.bib, and the .bst file Science.bst.  The package scicite.sty
