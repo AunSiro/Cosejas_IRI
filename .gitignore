@@ -1,5 +1,13 @@
 .DS_Store
 
+# Cosas de Siro
+/Latex/*.pdf
+/Latex/*.aux
+/Latex/*.bbl
+/Latex/*.blg
+/Latex/*.log
+/Latex/*.gz
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
