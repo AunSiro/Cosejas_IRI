@@ -1,7 +1,7 @@
 .DS_Store
 
 # Cosas de Siro
-/Latex/*.pdf
+*.pdf
 /Latex/*.aux
 /Latex/*.bbl
 /Latex/*.blg
