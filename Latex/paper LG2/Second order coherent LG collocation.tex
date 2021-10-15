@@ -1,0 +1,208 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Journal Article
+% LaTeX Template
+% Version 1.4 (15/5/16)
+%
+% This template has been downloaded from:
+% http://www.LaTeXTemplates.com
+%
+% Original author:
+% Frits Wenneker (http://www.howtotex.com) with extensive modifications by
+% Vel (vel@LaTeXTemplates.com)
+%
+% License:
+% CC BY-NC-SA 3.0 (http://creativecommons.org/licenses/by-nc-sa/3.0/)
+%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%----------------------------------------------------------------------------------------
+%	PACKAGES AND OTHER DOCUMENT CONFIGURATIONS
+%----------------------------------------------------------------------------------------
+
+\documentclass[twoside,twocolumn]{article}
+
+\usepackage{blindtext} % Package to generate dummy text throughout this template 
+
+\usepackage[sc]{mathpazo} % Use the Palatino font
+\usepackage[T1]{fontenc} % Use 8-bit encoding that has 256 glyphs
+\linespread{1.05} % Line spacing - Palatino needs more space between lines
+\usepackage{microtype} % Slightly tweak font spacing for aesthetics
+
+\usepackage[english]{babel} % Language hyphenation and typographical rules
+
+\usepackage[hmarginratio=1:1,top=32mm,columnsep=20pt]{geometry} % Document margins
+\usepackage[hang, small,labelfont=bf,up,textfont=it,up]{caption} % Custom captions under/above floats in tables or figures
+\usepackage{booktabs} % Horizontal rules in tables
+
+\usepackage{lettrine} % The lettrine is the first enlarged letter at the beginning of the text
+
+\usepackage{enumitem} % Customized lists
+\setlist[itemize]{noitemsep} % Make itemize lists more compact
+
+\usepackage{abstract} % Allows abstract customization
+\renewcommand{\abstractnamefont}{\normalfont\bfseries} % Set the "Abstract" text to bold
+\renewcommand{\abstracttextfont}{\normalfont\small\itshape} % Set the abstract itself to small italic text
+
+\usepackage{titlesec} % Allows customization of titles
+\renewcommand\thesection{\Roman{section}} % Roman numerals for the sections
+\renewcommand\thesubsection{\roman{subsection}} % roman numerals for subsections
+\titleformat{\section}[block]{\large\scshape\centering}{\thesection.}{1em}{} % Change the look of the section titles
+\titleformat{\subsection}[block]{\large}{\thesubsection.}{1em}{} % Change the look of the section titles
+
+\usepackage{fancyhdr} % Headers and footers
+\pagestyle{fancy} % All pages have headers and footers
+\fancyhead{} % Blank out the default header
+\fancyfoot{} % Blank out the default footer
+\fancyhead[C]{Running title $\bullet$ May 2016 $\bullet$ Vol. XXI, No. 1} % Custom header text
+\fancyfoot[RO,LE]{\thepage} % Custom footer text
+
+\usepackage{titling} % Customizing the title section
+
+\usepackage{hyperref} % For hyperlinks in the PDF
+
+% Bibliography
+% The cite package 
+% numbers option provides compact numerical references in the text. 
+\usepackage[numbers,sort]{natbib}
+\usepackage{multicol}
+
+%\\usepackage[sort,compress,space]{cite}
+%\usepackage[bookmarks=true,breaklinks=true]{hyperref}
+%\usepackage[sort&compress,numbers]{natbib}
+
+\usepackage{bm}
+\renewcommand{\vec}[1]{\bm{#1}}
+
+
+%----------------------------------------------------------------------------------------
+%	TITLE SECTION
+%----------------------------------------------------------------------------------------
+
+\setlength{\droptitle}{-4\baselineskip} % Move the title up
+
+\pretitle{\begin{center}\Huge\bfseries} % Article title formatting
+\posttitle{\end{center}} % Article title closing formatting
+\title{A second order coherent Legendre-Gauss pseudospectral collocation} % Article title
+\author{%
+\textsc{Siro Moreno}\thanks{Nota a pie de página} \\[1ex] % Your name
+\normalsize Institut de Robotica i Informatica Industrial (IRI), UPC-CSIC \\ % Your institution
+\normalsize \href{mailto:email}{email} % Your email address
+%\and % Uncomment if 2 authors are required, duplicate these 4 lines if more
+%\textsc{Jane Smith}\thanks{Corresponding author} \\[1ex] % Second author's name
+%\normalsize University of Utah \\ % Second author's institution
+%\normalsize \href{mailto:jane@smith.com}{jane@smith.com} % Second author's email address
+}
+\date{\today} % Leave empty to omit a date
+\renewcommand{\maketitlehookd}{%
+\begin{abstract}
+\noindent A new variant of Legendre-Gauss pseudospectral collocation is presented, that accounts for coherent modellization of coordinates and their derivatives when solving second order problems, such as most of the problems that come from mechanics.
+\end{abstract}
+}
+
+%----------------------------------------------------------------------------------------
+
+\begin{document}
+
+% Print the title
+\maketitle
+
+%----------------------------------------------------------------------------------------
+%	ARTICLE CONTENTS
+%----------------------------------------------------------------------------------------
+
+\section{Introduction}
+
+\lettrine[nindent=0em,lines=3]{P}seudospectral collocation methods have been widely used in the last decades in the field of Optimal Control for the transcription of a continuous problem into a discrete one. All of these methods approximate the unknown function as a polynomial of known degree, and then impose the fulfilling of system equations on a series of collocation points in order to calculate the coefficients of the polynomials.
+
+Three of the most used collocation points sets are the Legendre-Gauss (LG), Legendre-Gauss-Radau (LGR) and Legendre-Gauss-Lobatto(LGL) points. All three are defined on the domain [-1, 1] but differ in whether they include neither of the endpoints (LG), one of them (LGR) or both of them (LGL).
+Typically, the state is modeled as a polynomial by using a base of Lagrange polynomials associated with the corresponding collocation points, but also adding a non-collocation endpoint in the case of LG and LGR. That means that for N collocation points, we have polynomials of degree N in LG and LGR, but N-1 in LGL. A detailed exposition of these methods can be found on\cite{garg_09}.
+
+However, these transcription methods, when used like this, encounter some difficulties applied to second order problems. This kind of problem appears very often in physics as an expression of the form $\ddot{q} = f(q, \dot{q}, u, t)$ where $q$ are the coordinates, $\dot{q}$ the velocities, $\ddot{q}$ the accelerations, and $u$ the controls.
+
+Traditionally, the way to solve them is to translate the problem to a state space, where we use the state components $x$ as the variables of our problem. That way, our system equation becomes $\dot{x} = g(x, u, t)$, where:
+$$ x = \left[\begin{array}{c}x_0 \\ x_1\end{array} \right] = \left[\begin{array}{c}q \\ \dot{q}\end{array} \right],\ g(x, u, t) = \left[\begin{array}{c}x_1 \\ f(x_0, x_1, u, t)\end{array} \right] $$
+
+For all three schemes, doing this variable change implies duplicating the number of parameters of the problem, because for each coordinate we need to find the coefficients of two independent polynomials. 
+
+With LG and LGR, we have also a problem of transcription error: due modeling $x_0$ and $x_1$ as polynomials of the same degree, we can't assure that $\dot{x_0} = x_1$ outside collocation points where it is enforced.
+
+With LGL we have a different problem: when we use N collocation points, for each coordinate q, we are imposing 2N collocation restrictions and 2 initial value restrictions on the polynomials for $x_0$ and $x_1$. As these polynomials are constructed using a Lagrange base defined over the N collocation points, they have degree N-1, and therefore only N parameters each. This results in 2 extra restrictions that are passed to the u polynomial, resulting in a scheme that can be used for optimization but not for simulation, as it cannot accept arbitrary values for u.
+
+A paper by Ross, Rea and Fahroo \cite{ross_02} addressed the duplication of parameters and developed a formulation based on LGL that achieved greater speeds, but still have the same issues with u.
+
+In this paper we will propose a new method based on LG that will provide a solution to all these issues simultaneously.
+%------------------------------------------------
+
+\section{Methods}
+
+Suppose we had a problem with M coordinates $\vec{q} = [q_1...q_M]^T$ defined over a time interval $[t_s, t_f]$, whose system equations are $$\vec{\ddot{q}} = \vec{f}(\vec{q}(t), \dot{\vec{q}}(t), \vec{u}(t))$$
+Subject to initial conditions:
+$$\vec{q}(t_s) = \vec{q}_s,\ \vec{\dot{q}}(t_s) = \vec{\dot{q}}_s$$
+
+We calculate N Legendre-Gauss points, defined as the roots of a $N^{th}$-degree Legendre polynomial: $\vec{\tau_{LG}} = [\tau_1 ... \tau_{N}]^T$. These points span the interval (-1, 1) but don't include either endpoint.
+
+We transform the physics problem to the domain of $\tau \in [-1, 1]$ trough the affine transformation 
+$$t = \frac{t_f - t_s}{2}\tau + \frac{t_f - t_s}{2}$$
+We model each $q_k$ for $k = [1...M]$ as a polynomial of degree N+1. We can construct these polynomials using a Lagrange basis supported on N+2 points: the N LG points plus both extremes:
+$$q_k(t) \approx \sum_{i=0}^{N+1}Q_{ik}\phi_i(t)$$
+
+%------------------------------------------------
+
+\section{Results}
+
+%\begin{table}
+%\caption{Example table}
+%\centering
+%\begin{tabular}{llr}
+%\toprule
+%\multicolumn{2}{c}{Name} \\
+%\cmidrule(r){1-2}
+%First name & Last Name & Grade \\
+%\midrule
+%John & Doe & $7.5$ \\
+%Richard & Miles & $2$ \\
+%\bottomrule
+%\end{tabular}
+%\end{table}
+
+\blindtext % Dummy text
+
+\begin{equation}
+\label{eq:emc}
+e = mc^2
+\end{equation}
+
+\blindtext % Dummy text
+
+%------------------------------------------------
+
+\section{Discussion}
+
+\subsection{Subsection One}
+
+A statement requiring citation %\cite{Figueredo:2009dg}.
+\blindtext % Dummy text
+
+\subsection{Subsection Two}
+
+\blindtext % Dummy text
+
+%----------------------------------------------------------------------------------------
+%	REFERENCE LIST
+%----------------------------------------------------------------------------------------
+
+%\begin{thebibliography}{99} % Bibliography - this is intentionally simple in this template
+
+%\bibitem[Figueredo and Wolf, 2009]{Figueredo:2009dg}
+%Figueredo, A.~J. and Wolf, P. S.~A. (2009).
+%\newblock Assortative pairing and life history strategy - a cross-cultural
+%  study.
+%\newblock {\em Human Nature}, 20:317--330.
+\bibliographystyle{plainnat}
+\bibliography{paper}
+ 
+%\end{thebibliography}
+
+%----------------------------------------------------------------------------------------
+
+\end{document}
