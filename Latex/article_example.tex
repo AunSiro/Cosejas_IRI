@@ -70,10 +70,6 @@
 %\usepackage[bookmarks=true,breaklinks=true]{hyperref}
 %\usepackage[sort&compress,numbers]{natbib}
 
-\usepackage{amsmath}
-\usepackage{bm}
-\renewcommand{\vec}[1]{\bm{#1}}
-
 
 %----------------------------------------------------------------------------------------
 %	TITLE SECTION
@@ -136,70 +132,38 @@ In this paper we will propose a new method based on LG that will provide a solut
 
 \section{Methods}
 
-Suppose we had a problem with M coordinates $\vec{q} = [q_1...q_M]^T$ defined over a time interval $[t_s, t_f]$, whose system equations are $$\vec{\ddot{q}} = \vec{f}(\vec{q}(t), \dot{\vec{q}}(t), \vec{u}(t))$$
-Subject to initial conditions:
-$$\vec{q}(t_s) = \vec{q}_s,\ \vec{\dot{q}}(t_s) = \vec{\dot{q}}_s$$
+Maecenas sed ultricies felis. Sed imperdiet dictum arcu a egestas. 
+\begin{itemize}
+\item Donec dolor arcu, rutrum id molestie in, viverra sed diam
+\item Curabitur feugiat
+\item turpis sed auctor facilisis
+\item arcu eros accumsan lorem, at posuere mi diam sit amet tortor
+\item Fusce fermentum, mi sit amet euismod rutrum
+\item sem lorem molestie diam, iaculis aliquet sapien tortor non nisi
+\item Pellentesque bibendum pretium aliquet
+\end{itemize}
+\blindtext % Dummy text
 
-We calculate N Legendre-Gauss points, defined as the roots of a $N^{th}$-degree Legendre polynomial: $\vec{\tau_{LG}} = [\tau_1 ... \tau_{N}]^T$. These points span the interval (-1, 1) but don't include either endpoint.
-
-We transform the physics problem to the domain of $\tau \in [-1, 1]$ trough the affine transformation 
-$$t = \frac{t_f - t_s}{2}\tau + \frac{t_f - t_s}{2}$$
-We model each $q_k$ for $k = [1...M]$ as a polynomial of degree N+1. We can construct these polynomials using a Lagrange basis supported on N+2 points: the LG points plus both extremes $\tau_0 = -1,\ \tau_{N+1} = 1$:
-\begin{equation}
-	\label{eqn:def_q_k}
-	q_k(\tau) \approx \sum_{i=0}^{N+1}Q_{i,k}\phi_i(\tau)
-\end{equation}
-Where $Q_{i,k} = q_k(\tau_i)$ and each $\phi_i(\tau)$ is the Lagrange polynomial associated with the $i^{th}$ point:
-$$\phi_i(\tau): \prod_{\begin{array}{c}\scriptstyle j = 0 \\ \scriptstyle j \ne i\end{array}}^{N+1} \frac{\tau-\tau_j}{\tau_i-\tau_j}$$
-
-We can then define the matrix $\vec{Q}$ as:
-$$\vec{Q} = \;
-\begin{vmatrix} 
-	Q_{0,1} & \cdots & Q_{0,k} & \cdots & Q_{0,M} \\
-	\vdots &  & \vdots & & \vdots \\
-	Q_{i,1} & \cdots & Q_{i,k} & \cdots & Q_{i,M} \\
-	\vdots &  & \vdots & & \vdots \\
-	Q_{N+1,1} & \cdots & Q_{N+1,k} & \cdots & Q_{N+1,M}
-\end{vmatrix}
-$$
-And from this matrix, we can define the vectors:
-
-$\vec{Q}_k = [Q_{0,k}...Q_{N+1,k}]^T$, columns of the matrix, represent the values of coordinate k on the N+2 basis points.
-
-$\vec{Q}^*_i = [Q_{i,1}...Q_{i,M}]^T$, rows of the matrix, represent the values of all M coordinates at the point i.
-
-From equation (\ref*{eqn:def_q_k}) we can express the velocities:
-\begin{equation}
-	%\label{eqn:def_vel_k}
-	\dot{q}_k(\tau) \approx \sum_{i=0}^{N+1}Q_{i,k}\phi'_i(\tau)\frac{d\tau}{dt} =  \sum_{i=0}^{N+1}Q_{i,k}\phi'_i(\tau)\scriptstyle \frac{2}{t_f - t_s}
-\end{equation}
-And defining $D_{j,i}$ as $\phi'_i(\tau_j)$, the value at $\tau_j$:
-\begin{equation}
-	\begin{matrix}
-%label{eqn:def_vel_k}
-\dot{q}_k(\tau_j) \approx \sum_{i=0}^{N+1}Q_{i,k}\phi'_i(\tau_j)\frac{2}{t_f - t_s} = \\ = \sum_{i=0}^{N+1}D_{j,i}Q_{i,k}\frac{2}{t_f - t_s} = \frac{2}{t_f - t_s}(\vec{D}\vec{Q})_{j,k}
-\end{matrix}
-\end{equation}
-The matrix D, called Differentiation Matrix, is square and its size is (N+2)x(N+2)
+Text requiring further explanation\footnote{Example footnote}.
 
 %------------------------------------------------
 
 \section{Results}
 
-%\begin{table}
-%\caption{Example table}
-%\centering
-%\begin{tabular}{llr}
-%\toprule
-%\multicolumn{2}{c}{Name} \\
-%\cmidrule(r){1-2}
-%First name & Last Name & Grade \\
-%\midrule
-%John & Doe & $7.5$ \\
-%Richard & Miles & $2$ \\
-%\bottomrule
-%\end{tabular}
-%\end{table}
+\begin{table}
+\caption{Example table}
+\centering
+\begin{tabular}{llr}
+\toprule
+\multicolumn{2}{c}{Name} \\
+\cmidrule(r){1-2}
+First name & Last Name & Grade \\
+\midrule
+John & Doe & $7.5$ \\
+Richard & Miles & $2$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \blindtext % Dummy text
 
