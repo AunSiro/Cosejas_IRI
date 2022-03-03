@@ -7,6 +7,7 @@
 *.blg
 *.log
 *.gz
+*.out
 *.txt
 *.zshenv
 parse enric results.ipynb
